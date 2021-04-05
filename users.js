@@ -39,18 +39,16 @@ class Game {
 
 const getGame = async pin =>
   await db.first("Select * From Games Where gamePin=?", [pin]);
+const getUser = async id =>
+  await db.first("Select * From Users Where userId=?", [id]);
+const getMembers = async pin =>
+  await db.all("Select screenName, isHost From Users Where currentGame=?", [pin]);
 const gameExists = async pin => !!(await getGame(pin)).hostId;
 const gameState = async pin => !!(await getGame(pin)).isStarted;
 
 (async function() {
-  console.log(await gameExists("2b5e"));
+  console.log(await getMembers("2b5e"));
 })();
-
-const getUser = async id => await db.first("Select * From Users Where userId=?", [id]);
-
-
-const getMembers = async pin => 
-  var users = 
 
 module.exports = {
   User: User,

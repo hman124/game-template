@@ -20,6 +20,7 @@ app.get("/", (req, res) => {
 
 app.get("/game/new", (req, res) => {
   let user = new users.User(req.query.user);
+  
   let game = new users.Game(user);
   res.cookie("userId", user.userId);
   res.cookie("gamePin", game.gamePin);
