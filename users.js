@@ -30,7 +30,14 @@ class Game {
   }
 }
 
-async function
+async function getGame() {
+    var data = await db.first("Select * From Games Where gamePin=?", gamePin);
+    this.isStarted = data.isStarted;
+    this.hostId = data.hostId;
+    this.gamePin = gamePin;
+    this.numUsers = data.numUsers;
+  }
+ 
 
 async function gameExists(gamePin) {
   var game = Game.get(gamePin);
