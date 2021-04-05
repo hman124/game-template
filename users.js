@@ -27,6 +27,16 @@ class Game {
     this.hostId = user.userId;
     this.gamePin = crypto.randomBytes(2).toString("hex");
   }
+  get() {
+    var data = db
+      .first("Select * From Games Where gamePin=?", gamePin)
+      .then(data => {
+        this.isStarted = data.isStarted;
+        this.hostId = data.hostId;
+        this.gamePin = gamePin;
+        this.numUsers = data.numUsers;
+      });
+  }
   insertDb() {
     db.run(
       "Insert Into Games (hostId, gamePin, numUsers, isStarted) Values (?,?,1,false)",
@@ -40,9 +50,8 @@ class Game {
 }
 
 async function gameExists(gamePin) {
-  let data = await db.first("Select gamePin From Games Where gamePin=?", [
-    gamePin
-  ]);
+  var game = Game.get(gamePin);
+
   return !!data.gamePin;
 }
 
@@ -68,5 +77,6 @@ module.exports = {
   Game: Game,
   gameExists: gameExists,
   gameState: gameState,
-  getUser: getUser
+  getUser: getUser,
+  getMembers: getMembers
 };

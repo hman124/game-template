@@ -42,8 +42,9 @@ app.get("/game/join", async (req, res) => {
   }
 });
 
-app.get("/game/members", (req, res) => {
-  
+app.get("/game/members", async (req, res) => {
+  var members = await users.getMembers(req.cookies.gamePin);
+  res.send(members);
 });
 
 app.get("/api/listdb", async (req, res) => {
