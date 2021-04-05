@@ -20,9 +20,7 @@ app.get("/", (req, res) => {
 
 app.get("/game/new", (req, res) => {
   let user = new users.User(req.query.user);
-  user.insertDb();
   let game = new users.Game(user);
-  game.insertDb();
   res.cookie("userId", user.userId);
   res.cookie("gamePin", game.gamePin);
   res.redirect(307, "/game/wait");

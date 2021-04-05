@@ -6,13 +6,16 @@ class User {
     this.userId = crypto.randomBytes(8).toString("hex");
     this.screenName = screenName;
     this.currentGame = currentGame;
+    this.insertDb();
   }
   insertDb() {
     db.run(
       "Insert Into Users (userId, screenName, currentGame, isHost) Values (?,?,?,?)",
-      [this.userId, this.screenName, this.currentGame, !this.currentGame]);
+      [this.userId, this.screenName, this.currentGame, !this.currentGame]
+    );
     db.run("Update Games Set numUsers=numUsers+1 Where gamePin=?", [
-      this.currentGame]);
+      this.currentGame
+    ]);
   }
 }
 
@@ -20,24 +23,26 @@ class Game {
   constructor(user) {
     this.hostId = user.userId;
     this.gamePin = crypto.randomBytes(2).toString("hex");
+    this.insertDb();
   }
   insertDb() {
     db.run(
       "Insert Into Games (hostId, gamePin, numUsers, isStarted) Values (?,?,0,false)",
-      [this.hostId, this.gamePin]);
+      [this.hostId, this.gamePin]
+    );
     db.run("Update Users Set currentGame=? Where userId=?", [
-      this.gamePin, this.hostId]);
+      this.gamePin,
+      this.hostId
+    ]);
   }
 }
 
-async function getGame() {
-    var data = await db.first("Select * From Games Where gamePin=?", gamePin);
-    this.isStarted = data.isStarted;
-    this.hostId = data.hostId;
-    this.gamePin = gamePin;
-    this.numUsers = data.numUsers;
-  }
- 
+async function getGame(gamePin) {
+  var game = await db.first("Select * From Games Where gamePin=?", [gamePin]);
+  return 
+}
+
+console.log(getGame("deaf"))
 
 async function gameExists(gamePin) {
   var game = Game.get(gamePin);
