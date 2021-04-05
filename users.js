@@ -37,35 +37,20 @@ class Game {
   }
 }
 
-async function getGame(gamePin) {
-  var game = await db.first("Select * From Games Where gamePin=?", [gamePin]);
-  return 
-}
+const getGame = async pin =>
+  await db.first("Select * From Games Where gamePin=?", [pin]);
+const gameExists = async pin => !!(await getGame(pin)).hostId;
+const gameState = async pin => !!(await getGame(pin)).isStarted;
 
-console.log(getGame("deaf"))
+(async function() {
+  console.log(await gameExists("2b5e"));
+})();
 
-async function gameExists(gamePin) {
-  var game = Game.get(gamePin);
+const getUser = async id => await db.first("Select * From Users Where userId=?", [id]);
 
-  return !!data.gamePin;
-}
 
-async function gameState(gamePin) {
-  let data = await db.first("Select isStarted From Games Where gamePin=?", [
-    gamePin
-  ]);
-  return !!parseInt(data.isStarted);
-}
-
-async function getUser(userId) {
-  var userData = await db.first("Select * From Users Where userId=?", [userId]);
-  return userData;
-}
-
-async function getMembers(gamePin) {
-  var users = await db.all("Select * From Users Where gamePin=?", gamePin);
-  return users;
-}
+const getMembers = async pin => 
+  var users = 
 
 module.exports = {
   User: User,
