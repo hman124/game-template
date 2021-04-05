@@ -42,6 +42,10 @@ app.get("/game/join", async (req, res) => {
   }
 });
 
+app.get("/game/members", (req, res) => {
+  
+});
+
 app.get("/api/listdb", async (req, res) => {
   let data = await db.list();
   res.send(data);
@@ -52,8 +56,8 @@ app.get("/game/info", async (req, res) => {
 });
 
 app.get("/game/wait", async (req, res) => {
-  let data = await users.gameState(req.cookies.gamePin);
-  if (!data) {
+  let playing = await users.gameState(req.cookies.gamePin);
+  if (!playing) {
     var userState = await users.getUser(req.cookies.userId);
     if (userState.isHost) {
       res.sendFile(__dirname + "/views/host/wait.html");
@@ -66,8 +70,8 @@ app.get("/game/wait", async (req, res) => {
 });
 
 app.get("/game/play", async (req, res) => {
-  let data = await users.gameState(req.cookies.gamePin);
-  if (data) {
+  let playing = await users.gameState(req.cookies.gamePin);
+  if (playing) {
     res.send(data);
   } else {
     res.redirect(307, "/game/wait");

@@ -4,9 +4,16 @@
     <title>Waiting for game to start...</title>
   </head>
   <body>
-    <p>
-      You Are Not The Host
-    </p>
+    <h3>
+      Waiting for the game to start...
+    </h3>
+    <hr>
+    <h4>
+      Current players:
+    </h4>
+    <ul id="players">
+      
+    </ul>
     <script src="/socket.io/socket.io.js"></script>
     <script>
       var socket = io();
@@ -15,7 +22,6 @@
         fetch("/game/info")
           .then(response => response.json())
           .then(data => {
-          console.log("hi");
             socket.emit("linkGame", [data.gamePin, data.userId]);
           });
       });

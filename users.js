@@ -58,6 +58,11 @@ async function getUser(userId) {
   return userData;
 }
 
+async function getMembers(gamePin) {
+  var users = await db.all("Select * From Users Where gamePin=?", gamePin);
+  return users;
+}
+
 module.exports = {
   User: User,
   Game: Game,
