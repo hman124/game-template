@@ -1,5 +1,6 @@
-const server = require("./server.js");
-const io = require("socket.io")(server.http);
+const {http} = require("./server.js");
+const io = require("socket.io")(http);
+const db = require("./database.js");
 
 io.on("connect", socket => {
   socket.on("linkGame", data => {
@@ -8,3 +9,5 @@ io.on("connect", socket => {
     socket.join(data[0]);
   });
 });
+
+console.log("Sockets ready")

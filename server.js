@@ -1,11 +1,8 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const app = express();
-const fs = require("fs");
-const users = require("./users.js");
-const db = require("./database.js");
-const cookieParser = require("cookie-parser");
 const http = require("http").createServer(app);
+const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -81,4 +78,6 @@ app.get("/api/cleardb", async (req, res) => {
   res.send("hi");
 });
 
-var listener = http.listen(process.env.PORT);
+var listener = http.listen(process.env.PORT, () => {
+  console.log("Server ready")
+});
