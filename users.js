@@ -1,22 +1,30 @@
 const db = require("./database.js");
 const crypto = require("crypto");
 
+var getGame = async pin =>
+    await db.first("Select * From Games Where gamePin=?", [pin]),
+  getUser = async id =>
+    await db.first("Select * From Users Where userId=?", [id]),
+  getMembers = async pin =>
+    await db.all("Select screenName, isHost From Users Where currentGame=?", [
+      pin
+    ]),
+  userExists = async (username, pin) =>
+    !!(await db.first(
+      "Select userId From Users Where screenName=? And currentGame=?", [username, pin])).userId,
+  gameExists = async pin => !!(await getGame(pin)).hostId,
+  gameState = async pin => !!(await getGame(pin)).isStarted;
+
 class User {
   constructor(screenName, currentGame) {
-    this.valid = true;
-    (async function() {
-      var user = await userExists(screenName);
-      console.log("userd '" + user + "'");
-      if (user) {
-        this.valid = false;
-      } else {
-        this.userId = crypto.randomBytes(8).toString("hex");
-        this.screenName = screenName;
-        this.currentGame = currentGame;
-        this.insertDb();
-      }
-    }.bind(this)());
+    userExists(screenName).then(data => {
+      this.valid = data;
+    });
     if (this.valid) {
+      this.userId = crypto.randomBytes(8).toString("hex");
+      this.screenName = screenName;
+      this.currentGame = currentGame;
+      this.insertDb();
     }
   }
   insertDb() {
@@ -29,6 +37,8 @@ class User {
     ]);
   }
 }
+
+console.log(new User("steedster", "cool"));
 
 class Game {
   constructor(user) {
@@ -47,22 +57,6 @@ class Game {
     ]);
   }
 }
-
-const getGame = async pin =>
-  await db.first("Select * From Games Where gamePin=?", [pin]);
-const getUser = async id =>
-  await db.first("Select * From Users Where userId=?", [id]);
-const getMembers = async pin =>
-  await db.all("Select screenName, isHost From Users Where currentGame=?", [
-    pin
-  ]);
-const userExists = async (username, pin) =>
-  !!(await db.first(
-    "Select userId From Users Where screenName=? And currentGame=?",
-    [username, pin]
-  )).userId;
-const gameExists = async pin => !!(await getGame(pin)).hostId;
-const gameState = async pin => !!(await getGame(pin)).isStarted;
 
 module.exports = {
   User: User,
