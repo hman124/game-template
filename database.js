@@ -67,7 +67,7 @@ function dbFirst(query, stmts) {
 }
 
 async function dbList() {
-  return await dbAll("Select * From Games", []);
+  return await dbAll("Select * From Users", []);
 }
 
 module.exports = {
