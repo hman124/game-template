@@ -6,7 +6,6 @@ const users = require("./users.js");
 const db = require("./database.js");
 const cookieParser = require("cookie-parser");
 const http = require("http").createServer(app);
-const io = require("socket.io")(http);
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -20,16 +19,15 @@ app.get("/", (req, res) => {
 
 app.get("/game/new", (req, res) => {
   let user = new users.User(req.query.user);
-  
   let game = new users.Game(user);
+  user.currentGame = game.gamePin;
   res.cookie("userId", user.userId);
   res.cookie("gamePin", game.gamePin);
   res.redirect(307, "/game/wait");
 });
 
 app.get("/game/join", async (req, res) => {
-  let exists = await users.gameExists(req.query.gamePin);
-  //var exists = true;
+  const exists = await users.gameExists(req.query.gamePin);
   if (exists) {
     let user = new users.User(req.query.user, req.query.gamePin);
     user.insertDb();
@@ -83,14 +81,4 @@ app.get("/api/cleardb", async (req, res) => {
   res.send("hi");
 });
 
-io.on("connect", socket => {
-  socket.on("linkGame", user => {
-    console.log(user);
-    socket.join(user[0]);
-    io.to(user[0]).emit("newUser", "Yes");
-  });
-});
-
-var listener = http.listen(process.env.PORT, () => {
-  //console.log(`Your app is listening on port ${listener.address().port}`);
-});
+var listener = http.listen(process.env.PORT);

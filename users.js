@@ -27,7 +27,7 @@ class Game {
   }
   insertDb() {
     db.run(
-      "Insert Into Games (hostId, gamePin, numUsers, isStarted) Values (?,?,0,false)",
+      "Insert Into Games (hostId, gamePin, numUsers, isStarted) Values (?,?,1,false)",
       [this.hostId, this.gamePin]
     );
     db.run("Update Users Set currentGame=? Where userId=?", [
@@ -45,10 +45,6 @@ const getMembers = async pin =>
   await db.all("Select screenName, isHost From Users Where currentGame=?", [pin]);
 const gameExists = async pin => !!(await getGame(pin)).hostId;
 const gameState = async pin => !!(await getGame(pin)).isStarted;
-
-(async function() {
-  console.log(await getMembers("2b5e"));
-})();
 
 module.exports = {
   User: User,

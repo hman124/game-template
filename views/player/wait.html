@@ -18,16 +18,10 @@
     <script>
       var socket = io();
       
-      socket.on("connect", () => {
-        fetch("/game/info")
-          .then(response => response.json())
-          .then(data => {
-            socket.emit("linkGame", [data.gamePin, data.userId]);
-          });
-      });
-
-      socket.on("newUser", () => {
-        alert("yes");
+      socket.on("connect", async () => {
+       var req = await fetch("/game/info"),
+           data = await req.json();
+        socket.emit("linkGame", [data.gamePin, data.userId]);
       });
     </script>
   </body>
