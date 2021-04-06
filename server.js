@@ -3,7 +3,9 @@ const app = express();
 const http = require("http").createServer(app);
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
+
 const users = require("./users.js");
+const db = require("./database.js");
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
