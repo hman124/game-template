@@ -29,6 +29,7 @@
       });
       
       async function updatePlayers() {
+        document.querySelector("#players").innerHTML = "";
         var req = await fetch("/game/members"),
             data = await req.json();
         data.forEach(x => {

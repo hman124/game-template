@@ -32,6 +32,8 @@ app.get("/game/join", async (req, res) => {
   const exists = await users.gameExists(req.query.gamePin);
   if (exists) {
     let user = new users.User(req.query.user, req.query.gamePin);
+    console.log(user.valid);
+    if(!user.valid) { res.redirect("/play?taken"); return; }
     res.cookie("gamePin", user.currentGame);
     res.cookie("userId", user.userId);
     res.redirect(307, "/game/wait");
@@ -42,7 +44,6 @@ app.get("/game/join", async (req, res) => {
 
 app.get("/game/members", async (req, res) => {
   var members = await users.getMembers(req.cookies.gamePin);
-  console.log(req.cookies.gamePin);
   res.send(members);
 });
 

@@ -3,13 +3,21 @@ const crypto = require("crypto");
 
 class User {
   constructor(screenName, currentGame) {
-    this.userId = crypto.randomBytes(8).toString("hex");
-    this.screenName = screenName;
-    this.currentGame = currentGame;
-    this.insertDb();
+    this.valid = true;
     (async function() {
-      var user = getUser("screenName");
+      var user = await getUser(screenName);
+      co
+      if (user) {
+        this.valid = false;
+      } else {
+        this.userId = crypto.randomBytes(8).toString("hex");
+        this.screenName = screenName;
+        this.currentGame = currentGame;
+        this.insertDb();
+      }
     }.bind(this)());
+    if (this.valid) {
+    }
   }
   insertDb() {
     db.run(
@@ -46,12 +54,13 @@ const getUser = async id =>
   await db.first("Select * From Users Where userId=?", [id]);
 const getMembers = async pin =>
   await db.all("Select screenName, isHost From Users Where currentGame=?", [
-    pin]);
+    pin
+  ]);
 const userExists = async (username, pin) =>
   !!(await db.first(
     "Select userId From Users Where screenName=? And gamePin=?",
     [username, pin]
-  )).hostId;
+  )).userId;
 const gameExists = async pin => !!(await getGame(pin)).hostId;
 const gameState = async pin => !!(await getGame(pin)).isStarted;
 
