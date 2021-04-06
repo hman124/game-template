@@ -32,7 +32,6 @@ app.get("/game/join", async (req, res) => {
   const exists = await users.gameExists(req.query.gamePin);
   if (exists) {
     let user = new users.User(req.query.user, req.query.gamePin);
-    user.insertDb();
     res.cookie("gamePin", user.currentGame);
     res.cookie("userId", user.userId);
     res.redirect(307, "/game/wait");

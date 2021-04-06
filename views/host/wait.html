@@ -7,8 +7,11 @@
     <p>
       You Are The Host, in the (very near) future, you will have controls such as kick user and start game.
     </p>
-    <h1 id="ga">
-      
+    <h3>
+      Go to &lt;insert domain here&gt;/play and enter the pin:
+    </h3>
+    <h1 id="gamepin">
+      Loading game Pin...
     </h1>
     <script src="/socket.io/socket.io.js"></script>
        <script>
@@ -18,7 +21,7 @@
        var req = await fetch("/game/info"),
            data = await req.json();
         socket.emit("linkGame", [data.gamePin, data.userId]);
-        document.body.innerHTML += "<h1>" + data.gamePin + "</h1>"
+        document.querySelector("#gamepin").innerHTML = data.gamePin;
       });
     </script>
  

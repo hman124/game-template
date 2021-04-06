@@ -7,6 +7,9 @@ class User {
     this.screenName = screenName;
     this.currentGame = currentGame;
     this.insertDb();
+    (async function() {
+      var user = getUser("screenName");
+    }.bind(this)());
   }
   insertDb() {
     db.run(
@@ -42,7 +45,13 @@ const getGame = async pin =>
 const getUser = async id =>
   await db.first("Select * From Users Where userId=?", [id]);
 const getMembers = async pin =>
-  await db.all("Select screenName, isHost From Users Where currentGame=?", [pin]);
+  await db.all("Select screenName, isHost From Users Where currentGame=?", [
+    pin]);
+const userExists = async (username, pin) =>
+  !!(await db.first(
+    "Select userId From Users Where screenName=? And gamePin=?",
+    [username, pin]
+  )).hostId;
 const gameExists = async pin => !!(await getGame(pin)).hostId;
 const gameState = async pin => !!(await getGame(pin)).isStarted;
 
