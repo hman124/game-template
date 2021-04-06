@@ -8,14 +8,15 @@
       You Are The Host, in the (very near) future, you will have controls such as kick user and start game.
     </p>
     <script src="/socket.io/socket.io.js"></script>
-    <script>
+       <script>
       var socket = io();
-
-      fetch("/game/info")
-        .then(response => response.json())
-        .then(data => {
-          socket.emit("connectGame", data.gamePin);
-        });
+      
+      socket.on("connect", async () => {
+       var req = await fetch("/game/info"),
+           data = await req.json();
+        socket.emit("linkGame", [data.gamePin, data.userId]);
+      });
     </script>
+ 
   </body>
 </html>

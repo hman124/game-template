@@ -23,6 +23,20 @@
            data = await req.json();
         socket.emit("linkGame", [data.gamePin, data.userId]);
       });
+      
+      socket.on("newUser", () => {
+        document.querySelector("#players").
+      });
+      
+      async function updatePlayers() {
+        var req = await fetch("./members"),
+            data = await req.json();
+        data.forEach(x => {
+          var listElem = document.createElement("li");
+          listElem.innerHTML = x.screenName;
+          document.querySelector("#players").appendChild(lilstElem);
+        });
+      }
     </script>
   </body>
 </html>

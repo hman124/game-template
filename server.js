@@ -1,8 +1,10 @@
 const express = require("express");
 const app = express();
-const http = require("http").createServer(app);
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
+
+const http = require("http").createServer(app);
+const socket = require("./sockets.js")(http);
 
 const users = require("./users.js");
 const db = require("./database.js");
@@ -82,5 +84,5 @@ app.get("/api/cleardb", async (req, res) => {
 });
 
 var listener = http.listen(process.env.PORT, () => {
-  console.log("Server ready")
+  //console.log("Server ready")
 });
