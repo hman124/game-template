@@ -5,8 +5,8 @@ class User {
   constructor(screenName, currentGame) {
     this.valid = true;
     (async function() {
-      var user = await getUser(screenName);
-      co
+      var user = await userExists(screenName);
+      console.log("userd '" + user + "'");
       if (user) {
         this.valid = false;
       } else {
@@ -58,7 +58,7 @@ const getMembers = async pin =>
   ]);
 const userExists = async (username, pin) =>
   !!(await db.first(
-    "Select userId From Users Where screenName=? And gamePin=?",
+    "Select userId From Users Where screenName=? And currentGame=?",
     [username, pin]
   )).userId;
 const gameExists = async pin => !!(await getGame(pin)).hostId;
