@@ -21,21 +21,21 @@ async function dbSelect(coll, data) {
     });
 }
 
-function dbOpen() {
+function dbOpen(coll) {
   return new Promise((res, rej) => {
     var { MongoClient } = require("mongodb"),
       url = "mongodb://localhost:27017/";
     MongoClient.connect(url, function(err, db) {
       if (err) throw err;
       var dbo = db.db("gamev1");
-      res({ db: db, dbo: dbo });
+      res({ db: db, dbo: dbo, coll: dbo.collection(coll) });
     });
   });
 }
 
 async function dbUpdate(coll, query, set) {
   var database = await dbOpen(coll);
-  database["dbo"].collection(coll).updateOne(query, set, (err, res) => {
+  database["coll"].updateOne(query, set, (err, res) => {
     if (err) throw err;
     console.log("1 document updated");
     database["db"].close();
