@@ -33,7 +33,10 @@ app.get("/game/join", async (req, res) => {
   if (exists) {
     let user = new users.User(req.query.user, req.query.gamePin);
     console.log(user.valid);
-    if(!user.valid) { res.redirect("/play?taken"); return; }
+    if (!user.valid) {
+      res.redirect("/play?taken=true");
+      return;
+    }
     res.cookie("gamePin", user.currentGame);
     res.cookie("userId", user.userId);
     res.redirect(307, "/game/wait");
@@ -43,8 +46,7 @@ app.get("/game/join", async (req, res) => {
 });
 
 app.get("/game/members", async (req, res) => {
-  var members = await users.getMembers(req.cookies.gamePin);
-  res.send(members);
+  res.send(await users.getMembers(req.cookies.gamePin));
 });
 
 app.get("/api/listdb", async (req, res) => {
@@ -57,8 +59,7 @@ app.get("/game/info", async (req, res) => {
 });
 
 app.get("/game/wait", async (req, res) => {
-  let playing = await users.gameState(req.cookies.gamePin);
-  if (!playing) {
+  if (!(await users.gameState(req.cookies.gamePin))) {
     var userState = await users.getUser(req.cookies.userId);
     if (userState.isHost) {
       res.sendFile(__dirname + "/views/host/wait.html");
@@ -81,9 +82,7 @@ app.get("/game/play", async (req, res) => {
 
 app.get("/api/cleardb", async (req, res) => {
   db.run("Delete From Games Where 1");
-  res.send("hi");
+  res.send("OK");
 });
 
-var listener = http.listen(process.env.PORT, () => {
-  //console.log("Server ready")
-});
+http.listen(process.env.PORT);
