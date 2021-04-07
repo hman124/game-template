@@ -1,10 +1,11 @@
-async function dbInsert(coll, data) {
-  
-  var database = await dbOpen();
-  database["dbo"].collection(coll).insertOne(data, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    database["db"].close();
+function dbInsert(coll, data) {
+  return new Promise(async (res, rej) => {
+    var database = await dbOpen();
+    database["dbo"].collection(coll).insertOne(data, function(err, res) {
+      if (err) throw err;
+      console.log("1 document inserted");
+      database["db"].close();
+    });
   });
 }
 
@@ -32,8 +33,13 @@ function dbOpen() {
   });
 }
 
-async function dbUpdate() {
-  
+async function dbUpdate(coll, query, set) {
+  var database = await dbOpen(coll);
+  database["dbo"].collection(coll).updateOne(query, set, (err, res) => {
+    if (err) throw err;
+    console.log("1 document updated");
+    database["db"].close();
+  });
 }
 
 /*(function() {
@@ -55,4 +61,4 @@ async function dbUpdate() {
 module.exports = {
   dbSelect: dbSelect,
   dbInsert: dbInsert
-}
+};
