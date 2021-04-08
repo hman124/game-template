@@ -1,9 +1,8 @@
 function dbInsert(coll, data) {
   return new Promise(async (res, rej) => {
     var database = await dbOpen();
-    database["dbo"].collection(coll).insertOne(data, function(err, res) {
+    database["coll"].insertOne(data, function(err, res) {
       if (err) throw err;
-      console.log("1 document inserted");
       database["db"].close();
     });
   });
@@ -11,12 +10,10 @@ function dbInsert(coll, data) {
 
 async function dbSelect(coll, data) {
   var database = await dbOpen();
-  database["dbo"]
-    .collection(coll)
+  database["coll"]
     .find(data)
     .toArray((err, res) => {
       if (err) throw err;
-      console.log("1 document inserted");
       database["db"].close();
     });
 }
@@ -37,7 +34,6 @@ async function dbUpdate(coll, query, set) {
   var database = await dbOpen(coll);
   database["coll"].updateOne(query, set, (err, res) => {
     if (err) throw err;
-    console.log("1 document updated");
     database["db"].close();
   });
 }
