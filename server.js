@@ -28,18 +28,29 @@ app.get("/game/new", (req, res) => {
 });
 
 app.get("/game/join", async (req, res) => {
-  const gameExists = await users.gameExists(req.query.gamePin);
-  const userExists = await users.userExists(req.query.gamePin, req.query.user);
-  console.log(us)
-  if (gameExists && !userExists) {
-    let user = new users.User(req.query.user, req.query.gamePin);
-    res.cookie("gamePin", user.currentGame);
-    res.cookie("userId", user.userId);
-    res.redirect(307, "/game/wait");
-  } else if (userExists) {
-    res.redirect("/play?taken=true");
+  if (!!req.cookies.userId && !!req.cookies.gamePin) {
+    res.send(
+      "You are already in a game as a player or host." +
+        "To join another game, please restart your browser. " +
+        "In the future, there will be a log out button."
+    );
   } else {
-    res.send("Game Doesn't Exist");
+    const gameExists = await users.gameExists(req.query.gamePin);
+    const userExists = await users.userExists(
+      req.query.user,
+      req.query.gamePin
+    );
+    console.log(userExists);
+    if (gameExists && !userExists) {
+      let user = new users.User(req.query.user, req.query.gamePin);
+      res.cookie("gamePin", user.currentGame);
+      res.cookie("userId", user.userId);
+      res.redirect(307, "/game/wait");
+    } else if (userExists) {
+      res.redirect("/play?taken=true");
+    } else {
+      res.send("Game Doesn't Exist");
+    }
   }
 });
 
