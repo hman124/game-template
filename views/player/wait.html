@@ -30,6 +30,10 @@
         updatePlayers();
       });
       
+      socket.on("gameStartSuccess", () => {
+        window.location.replace("/game/play");
+      });
+      
     </script>
   </body>
 </html>
