@@ -64,6 +64,7 @@ module.exports = {
   gameExists: gameExists,
   userExists: userExists,
   gameState: gameState,
+  getGame: getGame,
   getUser: getUser,
   getMembers: getMembers,
   getMembersHost: getMembersHost

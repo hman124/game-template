@@ -40,7 +40,6 @@ app.get("/game/join", async (req, res) => {
       req.query.user,
       req.query.gamePin
     );
-    console.log(userExists);
     if (gameExists && !userExists) {
       let user = new users.User(req.query.user, req.query.gamePin);
       res.cookie("gamePin", user.currentGame);
@@ -79,7 +78,6 @@ app.get("/game/wait", async (req, res) => {
     const state = await users.gameState(req.cookies.gamePin);
     const user = await users.getUser(req.cookies.userId);
     if (!state && !!user) {
-      console.log(getFilename(user.isHost, "play"));
       res.sendFile(getFilename(user.isHost, "wait"));
     } else {
       res.redirect(307, "/game/play");

@@ -11,9 +11,10 @@ module.exports = function(http) {
       socket.join(data[1]);
     });
     socket.on("startGame", async data => {
+      console.log("starting game if creds are right");
       const game = await users.getGame(data['gamePin']);
       if(game && game.hostId == data['auth']) {
-        await db.run("Update Games Set (isStarted=1) Where gamePin=?", [data['gamePin']]);
+        await db.run("Update Games Set isStarted=1 Where gamePin=?", [data['gamePin']]);
         io.to(data['gamePin']).emit("gameStartSuccess");
       } else {
         io.to(data['auth']).emit("gameStartFailure");

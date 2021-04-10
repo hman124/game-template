@@ -2,38 +2,36 @@
 <html lang="en">
   <head>
     <title>Waiting for game to start...</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body>
     <h3>
       Waiting for the game to start...
     </h3>
-   <hr>
+    <hr />
     <h1>
       Success!
     </h1>
     <h3>
-      You are in the game. Now all you have to do is wait for the host to start the game...
+      You are in the game. If all is going as planned, you should see your name on the host's screen. Now all you have to do is wait for the host to start
+      the game!
     </h3>
-    
+
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      var socket = io();
-      
-      socket.on("connect", async () => {
-       var req = await fetch("/game/info"),
-           data = await req.json();
-        socket.emit("linkGame", [data.gamePin, data.userId]);
-      });
-      
-      socket.on("newUser", () => {
-        updatePlayers();
-      });
-      
-      socket.on("gameStartSuccess", () => {
-        window.location.replace("/game/play");
-      });
-      
+      (function() {
+        var socket = io();
+
+        socket.on("connect", async () => {
+          var req = await fetch("/game/info"),
+            data = await req.json();
+          socket.emit("linkGame", [data.gamePin, data.userId]);
+        });
+
+        socket.on("gameStartSuccess", () => {
+          window.location.replace("/game/play");
+        });
+      })();
     </script>
   </body>
 </html>
