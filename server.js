@@ -22,7 +22,6 @@ app.get("/", (req, res) => {
 app.get("/game/new", (req, res) => {
   let user = new users.User(req.query.user);
   let game = new users.Game(user);
-  user.currentGame = game.gamePin;
   res.cookie("userId", user.userId);
   res.cookie("gamePin", game.gamePin);
   res.redirect(307, "/game/wait");
