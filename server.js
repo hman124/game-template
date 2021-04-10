@@ -57,13 +57,10 @@ app.get("/game/info", async (req, res) => {
 });
 
 app.get("/game/wait", async (req, res) => {
-  if (!(await users.gameState(req.cookies.gamePin))) {
-    var userState = await users.getUser(req.cookies.userId);
-    if (userState.isHost) {
-      res.sendFile(__dirname + "/views/host/wait.html");
-    } else {
-      res.sendFile(__dirname + "/views/player/wait.html");
-    }
+  const state = await users.gameState(req.cookies.gamePin);
+  const user = await users.getUser(req.cookies.userId);
+  if (!state && !!user) {
+    res.sendFile(getFilename(user.isHost, "wait"));
   } else {
     res.redirect(307, "/game/play");
   }
@@ -71,12 +68,24 @@ app.get("/game/wait", async (req, res) => {
 
 app.get("/game/play", async (req, res) => {
   const state = await users.gameState(req.cookies.gamePin);
-  if (playing ) {
-    res.send(data);
+  const user = await users.getUser(req.cookies.userId);
+  if (state && !!user) {
+    res.sendFile(getFilename(user.isHost, "play"))   
   } else {
     res.redirect(307, "/game/wait");
   }
 });
+
+function getFilename(isHost, filename) {
+   switch (isHost) {
+      case true:
+       return `${__dirname}/views/host/${filename}.html`;
+      break;
+      case false:
+       return `${__dirname}/views/player/${filename}.html`;
+      break;
+  }
+}
 
 app.get("/api/cleardb", async (req, res) => {
   db.run("Delete From Games Where 1");
