@@ -30,13 +30,14 @@ app.get("/game/new", (req, res) => {
 app.get("/game/join", async (req, res) => {
   const gameExists = await users.gameExists(req.query.gamePin);
   const userExists = await users.userExists(req.query.gamePin, req.query.user);
+  console.log(us)
   if (gameExists && !userExists) {
     let user = new users.User(req.query.user, req.query.gamePin);
     res.cookie("gamePin", user.currentGame);
     res.cookie("userId", user.userId);
     res.redirect(307, "/game/wait");
-  } else if(userExists) {
-    res.redirect("/play?taken=true");    
+  } else if (userExists) {
+    res.redirect("/play?taken=true");
   } else {
     res.send("Game Doesn't Exist");
   }
@@ -44,7 +45,7 @@ app.get("/game/join", async (req, res) => {
 
 app.get("/game/members", async (req, res) => {
   const user = await users.getUser(req.cookies.userId);
-  if(user.isHost) {
+  if (user.isHost) {
     res.send(await users.getMembersHost(req.cookies.gamePin));
   } else {
     res.send(await users.getMembers(req.cookies.gamePin));
@@ -61,31 +62,39 @@ app.get("/game/info", async (req, res) => {
 });
 
 app.get("/game/wait", async (req, res) => {
-  const state = await users.gameState(req.cookies.gamePin);
-  const user = await users.getUser(req.cookies.userId);
-  if (!state && !!user) {
-    console.log(getFilename(user.isHost, "play"));
-    res.sendFile(getFilename(user.isHost, "wait"));
+  if (!req.cookies.gamePin) {
+    res.redirect(307, "/");
   } else {
-    res.redirect(307, "/game/play");
+    const state = await users.gameState(req.cookies.gamePin);
+    const user = await users.getUser(req.cookies.userId);
+    if (!state && !!user) {
+      console.log(getFilename(user.isHost, "play"));
+      res.sendFile(getFilename(user.isHost, "wait"));
+    } else {
+      res.redirect(307, "/game/play");
+    }
   }
 });
 
 app.get("/game/play", async (req, res) => {
-  const state = await users.gameState(req.cookies.gamePin);
-  const user = await users.getUser(req.cookies.userId);
-  if (state && !!user) {
-    res.sendFile(getFilename(user.isHost, "play"))   
+  if (!req.cookies.gamePin) {
+    res.redirect(307, "/");
   } else {
-    res.redirect(307, "/game/wait");
+    const state = await users.gameState(req.cookies.gamePin);
+    const user = await users.getUser(req.cookies.userId);
+    if (state && !!user) {
+      res.sendFile(getFilename(user.isHost, "play"));
+    } else {
+      res.redirect(307, "/game/wait");
+    }
   }
 });
 
 function getFilename(isHost, filename) {
-   if(isHost){
-     return `${__dirname}/views/host/${filename}.html`;
-   } else {
-     return `${__dirname}/views/player/${filename}.html`;
+  if (isHost) {
+    return `${__dirname}/views/host/${filename}.html`;
+  } else {
+    return `${__dirname}/views/player/${filename}.html`;
   }
 }
 
