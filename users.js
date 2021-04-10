@@ -17,15 +17,10 @@ var getGame = async pin =>
 
 class User {
   constructor(screenName, currentGame) {
-    userExists(screenName).then(data => {
-      this.valid = data;
-    });
-    if (this.valid) {
       this.userId = crypto.randomBytes(8).toString("hex");
       this.screenName = screenName;
       this.currentGame = currentGame;
       this.insertDb();
-    }
   }
   insertDb() {
     db.run(
@@ -62,6 +57,7 @@ module.exports = {
   User: User,
   Game: Game,
   gameExists: gameExists,
+  userExists: userExists,
   gameState: gameState,
   getUser: getUser,
   getMembers: getMembers

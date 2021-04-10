@@ -1,20 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Waiting for game to start...</title>
+    <title>Simple game template</title>
   </head>
   <body>
-    <p>
+    <p> 
       You Are The Host, in the (very near) future, you will have controls such as kick user and start game.
     </p>
-    <h3>
-      Go to &lt;insert domain here&gt;/play and enter the pin:
-    </h3>
-    <h1 id="gamepin">
-      Loading game Pin...
-    </h1>
+    <h3>Go to <span id="domain">Loading...</span>/play and enter the pin:</h3>
+    <h1 id="gamepin">Loading...</h1>
     <script src="/socket.io/socket.io.js"></script>
-       <script>
+    <script>
       var socket = io();
       
       socket.on("connect", async () => {
@@ -23,6 +19,8 @@
         socket.emit("linkGame", [data.gamePin, data.userId]);
         document.querySelector("#gamepin").innerHTML = data.gamePin;
       });
+         
+      document.querySelector("#domain").innerHTML = window.location.protocol + "//" + window.location.host;
     </script>
  
   </body>

@@ -29,17 +29,15 @@ app.get("/game/new", (req, res) => {
 });
 
 app.get("/game/join", async (req, res) => {
-  const exists = await users.gameExists(req.query.gamePin);
-  if (exists) {
+  const gameExists = await users.gameExists(req.query.gamePin);
+  const userExists = await users.userExists(req.query.gamePin, req.query.user);
+  if (gameExists && !userExists) {
     let user = new users.User(req.query.user, req.query.gamePin);
-    console.log(user.valid);
-    if (!user.valid) {
-      res.redirect("/play?taken=true");
-      return;
-    }
     res.cookie("gamePin", user.currentGame);
     res.cookie("userId", user.userId);
     res.redirect(307, "/game/wait");
+  } else if(userExists) {
+    res.redirect("/play?taken=true");    
   } else {
     res.send("Game Doesn't Exist");
   }
@@ -72,8 +70,8 @@ app.get("/game/wait", async (req, res) => {
 });
 
 app.get("/game/play", async (req, res) => {
-  let playing = await users.gameState(req.cookies.gamePin);
-  if (playing) {
+  const state = await users.gameState(req.cookies.gamePin);
+  if (playing ) {
     res.send(data);
   } else {
     res.redirect(307, "/game/wait");
