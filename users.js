@@ -11,16 +11,23 @@ var getGame = async pin =>
     ]),
   userExists = async (username, pin) =>
     !!(await db.first(
-      "Select userId From Users Where screenName=? And currentGame=?", [username, pin])).userId,
+      "Select userId From Users Where screenName=? And currentGame=?",
+      [username, pin]
+    )).userId,
   gameExists = async pin => !!(await getGame(pin)).hostId,
-  gameState = async pin => !!(await getGame(pin)).isStarted;
+  gameState = async pin => !!(await getGame(pin)).isStarted,
+  getMembersHost = async pin =>
+    await db.all(
+      "Select screenName, isHost, userId From Users Where currentGame=?",
+      [pin]
+    );
 
 class User {
   constructor(screenName, currentGame) {
-      this.userId = crypto.randomBytes(8).toString("hex");
-      this.screenName = screenName;
-      this.currentGame = currentGame;
-      this.insertDb();
+    this.userId = crypto.randomBytes(8).toString("hex");
+    this.screenName = screenName;
+    this.currentGame = currentGame;
+    this.insertDb();
   }
   insertDb() {
     db.run(
@@ -32,8 +39,6 @@ class User {
     ]);
   }
 }
-
-console.log(new User("steedster", "cool"));
 
 class Game {
   constructor(user) {
@@ -60,5 +65,6 @@ module.exports = {
   userExists: userExists,
   gameState: gameState,
   getUser: getUser,
-  getMembers: getMembers
+  getMembers: getMembers,
+  getMembersHost: getMembersHost
 };

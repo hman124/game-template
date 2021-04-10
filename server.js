@@ -44,7 +44,12 @@ app.get("/game/join", async (req, res) => {
 });
 
 app.get("/game/members", async (req, res) => {
-  res.send(await users.getMembers(req.cookies.gamePin));
+  const user = await users.getUser(req.cookies.userId);
+  if(user.isHost) {
+    res.send(await users.getMembersHost(req.cookies.gamePin));
+  } else {
+    res.send(await users.getMembers(req.cookies.gamePin));
+  }
 });
 
 app.get("/api/listdb", async (req, res) => {
@@ -60,6 +65,7 @@ app.get("/game/wait", async (req, res) => {
   const state = await users.gameState(req.cookies.gamePin);
   const user = await users.getUser(req.cookies.userId);
   if (!state && !!user) {
+    console.log(getFilename(user.isHost, "play"));
     res.sendFile(getFilename(user.isHost, "wait"));
   } else {
     res.redirect(307, "/game/play");
@@ -77,13 +83,10 @@ app.get("/game/play", async (req, res) => {
 });
 
 function getFilename(isHost, filename) {
-   switch (isHost) {
-      case true:
-       return `${__dirname}/views/host/${filename}.html`;
-      break;
-      case false:
-       return `${__dirname}/views/player/${filename}.html`;
-      break;
+   if(isHost){
+     return `${__dirname}/views/host/${filename}.html`;
+   } else {
+     return `${__dirname}/views/player/${filename}.html`;
   }
 }
 
