@@ -11,11 +11,12 @@
  </head>
   <body>
     <h3>
-      Host a new game
+      Join an existing game
     </h3>
-      <form action="/game/new">
+      <form action="/game/join">
+        <input name="gamePin" type="text" maxlength="20" placeholder="Game Pin" required>
         <input name="user" type="text" maxlength="20" placeholder="Username" required>
-        <input type="submit" value="Make Game">
-      </form>      
+        <input type="submit" value="Join Game">
+      </form> 
   </body>
 </html>

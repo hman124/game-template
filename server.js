@@ -19,6 +19,10 @@ app.get("/", (req, res) => {
   res.sendFile(`${__dirname}/views/index.html`);
 });
 
+app.get("/play", (req, res) => {
+  res.sendFile(`${__dirname}/views/join.html`);
+});
+
 app.get("/game/new", (req, res) => {
   let user = new users.User(req.query.user);
   let game = new users.Game(user);
