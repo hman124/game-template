@@ -6,7 +6,7 @@ var getGame = async pin =>
   getUser = async id =>
     await db.first("Select * From Users Where userId=?", [id]),
   getMembers = async pin =>
-    await db.all("Select screenName, isHost From Users Where currentGame=?", [
+    await db.all("Select * From Users Where currentGame=?", [
       pin
     ]),
   userExists = async (username, pin) =>
@@ -15,13 +15,7 @@ var getGame = async pin =>
       [username, pin]
     )).userId,
   gameExists = async pin => !!(await getGame(pin)).hostId,
-  gameState = async pin => !!(await getGame(pin)).isStarted,
-  getMembersHost = async pin =>
-    await db.all(
-      "Select screenName, isHost, userId From Users Where currentGame=?",
-      [pin]
-    );
-
+  gameState = async pin => !!(await getGame(pin)).isStarted;
 class User {
   constructor(screenName, currentGame) {
     this.userId = crypto.randomBytes(8).toString("hex");
@@ -66,6 +60,5 @@ module.exports = {
   gameState: gameState,
   getGame: getGame,
   getUser: getUser,
-  getMembers: getMembers,
-  getMembersHost: getMembersHost
+  getMembers: getMembers
 };

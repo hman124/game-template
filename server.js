@@ -60,9 +60,9 @@ app.get("/game/join", async (req, res) => {
 app.get("/game/members", async (req, res) => {
   const user = await users.getUser(req.cookies.userId);
   if (user.isHost) {
-    res.send(await users.getMembersHost(req.cookies.gamePin));
-  } else {
     res.send(await users.getMembers(req.cookies.gamePin));
+  } else {
+    res.sendStatus(404);
   }
 });
 

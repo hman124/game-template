@@ -14,6 +14,7 @@
 }
 
 body {
+  text-align:center;
   font-family:rubik;
 }
 
@@ -32,17 +33,22 @@ body {
   font-size:70px;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  margin:10px 0 10px 0;
+}
+
 ul {
   padding:40px;
   display:flex;
   flex-direction:row;
   align-items:center;
   font-family:calibri;
+  flex-wrap:wrap;
 }
 
 ul li {
-  display:inline-block;
-  margin:20px 0 20px 0;
+  display:block;
+  padding:20px;
   font-size:30px;
   font-weight:600;
   list-style:none;
