@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <link rel="stylesheet" href="/host.css">
     <title>Simple game template</title>
   </head>
   <body>
-    <p> 
-      You Are The Host, in the (very near) future, you will have controls such as kick user and start game.
-    </p>
-    <h3>Go to <span id="domain">Loading...</span>/play and enter the pin:</h3>
-    <h1 id="gamepin">Loading...</h1>
+    <div class="instructions">
+    <h3 class="url">Go to <span id="domain">Loading...</span>/play and enter the pin:</h3>
+    <h1 id="gamepin" class="pin">Loading...</h1>
+    <div style="clear:both;"></div>
+    </div>
     <ul id="players"></ul>
     <small>
       Psst! just click on someone's name to kick them out of the game!

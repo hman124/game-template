@@ -1,0 +1,33 @@
+@font-face {
+  src:url(https://cdn.glitch.com/38d28f59-c715-444f-a81a-9ace84dbe9f0%2FRubik-BoldItalic.ttf?v=1605571458887);
+  font-family:rubik;
+}
+
+* {
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+*::after, *::before {
+  box-sizing:border-box;
+}
+
+body {
+  font-family:rubik;
+}
+
+.instructions {
+  background-color:#428af5;
+  color:white;
+  width:100vw;
+  text-align:center;
+}
+
+.link {
+  font-size:40px;
+}
+
+.pin {
+  font-size:50px;
+}
