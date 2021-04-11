@@ -25,9 +25,26 @@ body {
 }
 
 .link {
-  font-size:40px;
+  font-size:30px;
 }
 
 .pin {
-  font-size:50px;
+  font-size:70px;
+}
+
+ul {
+  padding:40px;
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  font-family:calibri;
+}
+
+ul li {
+  display:inline-block;
+  margin:20px 0 20px 0;
+  font-size:30px;
+  font-weight:600;
+  list-style:none;
+  margin:auto;
 }
