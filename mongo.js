@@ -1,33 +1,36 @@
+var url =
+      process.env.protocol +
+      process.env.user +
+      ":" +
+      process.env.password +
+      "@" +
+      process.env.host +
+      "/" +
+      process.env.path +
+      process.env.query,
+    dbo;
+
 function dbInsert(coll, data) {
-  return new Promise(async (resolve, reject) => {
-    var database = await dbOpen();
-    database["coll"].insertOne(data, function(err, res) {
-      if (err) throw err;
-      resolve(res);
-      database["db"].close();
-    });
-  });
+    dbo.insertOne(data, function(err, res) {
+      if (err) throw err;});
 }
 
 function dbSelect(coll, data) {
   return new Promise(async (resolve, reject) => {
-    var database = await dbOpen();
     database["coll"].find(data).toArray((err, res) => {
       if (err) throw err;
       resolve(res);
-      database["db"].close();
     });
   });
 }
 
 function dbOpen(coll) {
   return new Promise((resolve, reject) => {
-    var { MongoClient } = require("mongodb"),
-      url = "mongodb://localhost:27017/";
+    var { MongoClient } = require("mongodb");
     MongoClient.connect(url, function(err, db) {
       if (err) throw err;
-      var dbo = db.db("gamev1");
-      resolve({ db: db, dbo: dbo, coll: dbo.collection(coll) });
+      var dboa = db.db("gamev1");
+      dbo = dboa;
     });
   });
 }
@@ -45,7 +48,6 @@ function dbUpdate(coll, query, set) {
 
 function dbSetup() {
   var MongoClient = require("mongodb").MongoClient;
-  var url = "mongodb://localhost:27017/";
   MongoClient.connect(url, function(err, db) {
     if (err) throw err;
     var dbo = db.db("gamev1");
@@ -56,7 +58,7 @@ function dbSetup() {
     });
   });
 }
-dbSetup()
+dbSetup();
 
 module.exports = {
   dbSelect: dbSelect,
