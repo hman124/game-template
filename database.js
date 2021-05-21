@@ -6,21 +6,14 @@ const db = new sqlite3.Database(dbFile);
 
 db.serialize(() => {
   if (!exists) {
-    db.run(
-      "CREATE TABLE Games (gamePin TEXT, numUsers INT, hostId TEXT, isStarted BOOL)"
-    );
-    db.run(
-      "CREATE TABLE Users (userId TEXT, screenName TEXT, currentGame TEXT, isHost BOOL)"
-    );
+    db.run("CREATE TABLE Games (gamePin TEXT, numUsers INT, hostId TEXT, isStarted BOOL)");
+    db.run("CREATE TABLE Users (userId TEXT, screenName TEXT, currentGame TEXT, isHost BOOL)");
   } else {
     //console.log("Database ready");
   }
 });
 
-function dbAll(query, stmts) {
-  if (!stmts) {
-    stmts = [];
-  }
+function dbAll(query, ...stmts) {
   return new Promise((res, rej) => {
     db.all(query, ...stmts, (err, rows) => {
       if (err) {
@@ -32,10 +25,7 @@ function dbAll(query, stmts) {
   });
 }
 
-function dbRun(query, stmts) {
-  if (!stmts) {
-    stmts = [];
-  }
+function dbRun(query, ...stmts) {
   return new Promise((res, rej) => {
     db.run(query, ...stmts, err => {
       if (err) {
@@ -47,10 +37,7 @@ function dbRun(query, stmts) {
   });
 }
 
-function dbFirst(query, stmts) {
-  if (!stmts) {
-    stmts = [];
-  }
+function dbFirst(query, ...stmts) {
   return new Promise((res, rej) => {
     db.all(query, ...stmts, (err, rows) => {
       if (err) {
