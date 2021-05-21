@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <title>Civilpaper - playing game</title>
+    <meta name="viewport" content="width=device-width, initial-scale-1.0">
   </head>
   <body>
     <h1>
@@ -13,7 +14,24 @@
     <script src="/linkgame.js"></script>
     <script>
       linkGame({{gamePin}}{{userId}});
+      
+      var socket = io(),
+          nextPlace = 1;
+      socket.on("newUpdate", update => {
+        var li = document.createElement("li");
+        li.innerHTML = `<b>${update.user}</b> ${update.text}`;
+        document.querySelector("#updates").appendChild(li);
+      });
+      
+      socket.on("newWin", win => {
+        var li = document.createElement("li");
+        li.innerHTML = `${nextPlace}. ${win.user}`;
+        nextPlace++;
+      });
+      
+      document.onbeforeunlink = () => {
+        return "Are you sure you want to exit? (game will end)";
+      });
     </script>
-
   </body>
 </html>
