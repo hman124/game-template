@@ -1,10 +1,9 @@
-(function() {
+function setup(gamePin, userId) {
   var socket = io();
-  
   document.querySelector("#start").addEventListener("click", () => {
     socket.emit("startGame", {
-      gamePin: gameInfo.gamePin,
-      auth: gameInfo.userId
+      gamePin: gamePin,
+      auth: userId
     });
   });
 
@@ -36,4 +35,4 @@
 
   document.querySelector("#domain").innerHTML =
     window.location.protocol + "//" + window.location.host;
-})();
+}

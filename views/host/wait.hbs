@@ -3,6 +3,7 @@
   <head>
     <link rel="stylesheet" href="/host.css">
     <title>Simple game template</title>
+    <meta name="viewport" content="width=device-width, initial-scale-1.0">
   </head>
   <body>
     <div class="instructions">
@@ -16,5 +17,12 @@
     <input type="button" id="start" value="Start Game">
     <script src="/socket.io/socket.io.js"></script>
     <script src="/host.js"></script>
+    <script src="/linkgame.js"></script>
+    <script>
+      var params = ["{{gamePin}}","{{userId}}"];
+      linkGame(...params);
+      setup(...params)
+    </script>
+
   </body>
 </html>
