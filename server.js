@@ -28,8 +28,8 @@ app.get("/play", (req, res) => {
 });
 
 app.get("/game/new", (req, res) => {
-  let user = new users.User(req.query.user);
-  let game = new users.Game(user);
+  let user = new users.User(req.query.user),
+      game = new users.Game(user);
   res.cookie("userId", user.userId);
   res.cookie("gamePin", game.gamePin);
   res.redirect(307, "/game/wait");
@@ -37,17 +37,12 @@ app.get("/game/new", (req, res) => {
 
 app.get("/game/join", async (req, res) => {
   if (!!req.cookies.userId && !!req.cookies.gamePin) {
-    res.send(
-      "You are already in a game as a player or host." +
-        "To join another game, please restart your browser. " +
-        "In the future, there will be a log out button."
-    );
+    res.send("error, please restart your browser")
   } else {
     const gameExists = await users.gameExists(req.query.gamePin);
     const userExists = await users.userExists(
       req.query.user,
-      req.query.gamePin
-    );
+      req.query.gamePin);
     if (gameExists && !userExists) {
       let user = new users.User(req.query.user, req.query.gamePin);
       res.cookie("gamePin", user.currentGame);
@@ -59,6 +54,10 @@ app.get("/game/join", async (req, res) => {
       res.send("Game Doesn't Exist");
     }
   }
+});
+
+app.use("/game/*", (req, res, next) => {
+  !req.cookies.gamePin? res.redirect(307, "/"): next();
 });
 
 app.get("/game/members", async (req, res) => {
@@ -75,36 +74,25 @@ app.get("/api/listdb", async (req, res) => {
   res.send(data);
 });
 
-app.get("/game/info", async (req, res) => {
-  res.send(req.cookies);
-});
-
 app.get("/game/wait", async (req, res) => {
-  if (!req.cookies.gamePin) {
-    res.redirect(307, "/");
-  } else {
     const state = await users.gameState(req.cookies.gamePin);
     const user = await users.getUser(req.cookies.userId);
     if (!state && !!user) {
-      res.render(getFilename(user.isHost, "wait"), {userId: req.cookies.userId, gamePin: req.cookies.gamePin});
+      res.render(getFilename(user.isHost, "wait"), req.cookies);
     } else {
       res.redirect(307, "/game/play");
     }
-  }
+  
 });
 
 app.get("/game/play", async (req, res) => {
-  if (!req.cookies.gamePin) {
-    res.redirect(307, "/");
-  } else {
     const state = await users.gameState(req.cookies.gamePin);
     const user = await users.getUser(req.cookies.userId);
     if (state && !!user) {
-      res.sendFile(getFilename(user.isHost, "play"));
+      res.render(getFilename(user.isHost, "play"), req.cookies);
     } else {
       res.redirect(307, "/game/wait");
     }
-  }
 });
 
 function getFilename(isHost, filename) {
