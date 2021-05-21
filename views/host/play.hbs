@@ -27,12 +27,13 @@
         li.innerHTML = `${nextPlace}. ${win.user}`;
         nextPlace++;
       });
-      
-       window.onbeforeunload = confirmExit;
-    function confirmExit(event) {
-      event.returnValue = "han solo"
-        return "You have attempted to leave this page. Are you sure?";
-    }
+ window.addEventListener("load", () => {
+   
+ window.addEventListener('beforeunload', function(e) {
+    e.preventDefault();
+    e.returnValue = '';
+});
+ });    
     </script>
   </body>
 </html>
