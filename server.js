@@ -9,6 +9,10 @@ const socket = require("./sockets.js")(http);
 const users = require("./users.js");
 const db = require("./database.js");
 
+const hbs = require("hbs");
+
+app.set("view engine", "hbs");
+
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -82,7 +86,7 @@ app.get("/game/wait", async (req, res) => {
     const state = await users.gameState(req.cookies.gamePin);
     const user = await users.getUser(req.cookies.userId);
     if (!state && !!user) {
-      res.sendFile(getFilename(user.isHost, "wait"));
+      res.render(getFilename(user.isHost, "wait"), {userId: req.cookies.userId, gamePin: req.cookies.gamePin});
     } else {
       res.redirect(307, "/game/play");
     }
@@ -105,9 +109,9 @@ app.get("/game/play", async (req, res) => {
 
 function getFilename(isHost, filename) {
   if (isHost) {
-    return `${__dirname}/views/host/${filename}.html`;
+    return `${__dirname}/views/host/${filename}.hbs`;
   } else {
-    return `${__dirname}/views/player/${filename}.html`;
+    return `${__dirname}/views/player/${filename}.hbs`;
   }
 }
 

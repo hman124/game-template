@@ -1,15 +1,6 @@
 (function() {
-  var socket = io(),
-    gameInfo;
-
-  socket.on("connect", async () => {
-    var req = await fetch("/game/info"),
-      data = await req.json();
-    gameInfo = data;
-    socket.emit("linkGame", [data.gamePin, data.userId]);
-    document.querySelector("#gamepin").innerHTML = data.gamePin;
-  });
-
+  var socket = io();
+  
   document.querySelector("#start").addEventListener("click", () => {
     socket.emit("startGame", {
       gamePin: gameInfo.gamePin,
@@ -26,9 +17,7 @@
   });
 
   socket.on("gameStartFailure", () => {
-    alert(
-      "Game failed to start... try making a new game ( or not hacking into my code :) )"
-    );
+    alert("Game failed to start... try making a new game ( or not hacking into my code :) )");
   });
 
   async function updatePlayers() {

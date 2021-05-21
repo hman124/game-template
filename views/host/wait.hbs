@@ -7,16 +7,12 @@
   <body>
     <div class="instructions">
     <h3 class="link">Go to <span id="domain">Loading...</span>/play and enter the pin:</h3>
-    <h1 id="gamepin" class="pin">Loading...</h1>
+    <h1>{{gamePin}}</h1>
     <div style="clear:both;"></div>
     </div>
-    <h1>
-      Currently in the Game:
-    </h1>
+    <h1>Currently in the Game:</h1>
     <ul id="players"></ul><br>
-    <small>
-      Psst! just click on someone to kick them out of the game!
-    </small><br>
+    <small>Psst! just click on someone to kick them out of the game!</small><br>
     <input type="button" id="start" value="Start Game">
     <script src="/socket.io/socket.io.js"></script>
     <script src="/host.js"></script>

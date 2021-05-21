@@ -1,15 +1,4 @@
 (function() {
-  var socket = io();
-
-  socket.on("connect", async () => {
-    var req = await fetch("/game/info"),
-      data = await req.json();
-    socket.emit("linkGame", [data.gamePin, data.userId]);
-  });
-
-  socket.on("gameStartSuccess", () => {
-    window.location.replace("/game/play");
-  });
     // first we need to create a stage
       var stage = new Konva.Stage({
         container: "container", // id of container <div>
