@@ -8,3 +8,10 @@ function linkGame(gamePin, userId) {
     window.location.replace("/game/play");
   });
 }
+
+ window.addEventListener("load", () => {
+   window.addEventListener('beforeunload', function(e) {
+    e.preventDefault();
+    e.returnValue = '';
+   });
+ }); 
