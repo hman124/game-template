@@ -9,9 +9,11 @@ function linkGame(gamePin, userId) {
   });
 }
 
- window.addEventListener("load", () => {
+ window.addEventListener("click", addUnload);
+var addUnload = () => {
    window.addEventListener('beforeunload', function(e) {
     e.preventDefault();
     e.returnValue = '';
    });
- }); 
+  window.removeEventListener("click", addUnload);
+}
