@@ -11,10 +11,17 @@ const io = require("./sockets.js")(http);
 const users = require("./users.js");
 const db = require("./database.js");
 
-
 hbs.registerPartials(__dirname + "/templates");
 
 app.set("view engine", "hbs");
+
+app.use((req, res, next) => {
+   if (!req.headers["x-forwarded-proto"].startsWith("https")) {
+    return res.redirect("https://" + req.headers.host + req.url);
+  } else {
+    return next();
+  }
+});
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));

@@ -15,7 +15,7 @@ document.querySelector("#start").addEventListener("click", () => {
 
   async function updatePlayers() {
     document.querySelector("#players").innerHTML = "";
-    var req = await fetch("/game/members"),
+    var req = await fetch("/game/members", {credentials:"include"}),
         data = await req.json();
     data.forEach(x => {
       var listElem = document.createElement("li"),
