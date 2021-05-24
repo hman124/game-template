@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-  res.render(`${__dirname}/views/player/play.hbs`);
+  res.sendFile(`${__dirname}/views/index.html`);
 });
 
 app.get("/play", (req, res) => {

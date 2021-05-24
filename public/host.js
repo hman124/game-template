@@ -18,6 +18,10 @@ function setup(gamePin, userId) {
   socket.on("gameStartFailure", () => {
     alert("Game failed to start... try making a new game ( or not hacking into my code :) )");
   });
+  
+  socket.on("win", user => {
+    
+  });
 
   async function updatePlayers() {
     document.querySelector("#players").innerHTML = "";

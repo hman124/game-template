@@ -21,11 +21,19 @@
         document.querySelector("#updates").appendChild(li);
       });
       
-      socket.on("newWin", win => {
+      socket.on("win", win => {
         var li = document.createElement("li");
-        li.innerHTML = `${nextPlace}. ${win.user}`;
+        li.innerHTML = `${nextPlace}. ${win.screenName}`;
         nextPlace++;
-      });   
+      });  
+      var addUnload = () => {
+   window.addEventListener('beforeunload', function(e) {
+    e.preventDefault();
+    e.returnValue = '';
+   });
+  window.removeEventListener("click", addUnload);
+}
+ window.addEventListener("click", addUnload);
     </script>
   </body>
 </html>
