@@ -14,7 +14,7 @@ module.exports = function(http) {
     socket.on("win", async userId => {
       var user = await db.first("Select * From Users Where userId=?", userId),
           game = await db.first("Select * From Games Where gamePin=?", user.currentGame);
-        console.log(user);
+        console.log(game);
       if(user.userId && game.gamePin) {
         io.to(game.hostId).emit("win", user);
       }
