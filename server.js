@@ -37,7 +37,9 @@ app.get("/game/new", (req, res) => {
 });
 
 app.get("/game/join", async (req, res) => {
+  
   if (req.cookies.userId && req.cookies.gamePin) {
+    await db.run("Delete From Users Where userId=?", userId);
     res.cookie("userId", {maxAge:0});
     res.cookie("gamePin", {maxAge:0});
   } 
@@ -56,8 +58,15 @@ app.get("/game/join", async (req, res) => {
     }
 });
 
-app.use("/game/*", (req, res, next) => {
-  !req.cookies.gamePin&&!req.cookies.userId? res.redirect(307, "/"): next();
+app.use("/game/*", async (req, res, next) => {
+  if(!req.cookies.gamePin&&!req.cookies.userId) {res.redirect(307, "/")}
+  else {
+    let isUserValid = 
+    let user = await db.first("*", "Users", "userId=?", req.cookies.userId),
+        game = await db.first("*", "Games", "gamePin=?", req.cookies.gamePin);
+    req.game = game;
+    req.user = user;
+    next();}
 });
 
 app.get("/game/members", async (req, res) => {
