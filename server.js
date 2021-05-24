@@ -30,19 +30,19 @@ app.get("/play", (req, res) => {
 app.get("/game/new", (req, res) => {
   let user = new users.User(req.query.user),
       game = new users.Game(user);
+  console.log(user.userId == game.hostId);
   res.cookie("userId", user.userId);
   res.cookie("gamePin", game.gamePin);
   res.redirect(307, "/game/wait");
 });
 
 app.get("/game/join", async (req, res) => {
-  if (!!req.cookies.userId && !!req.cookies.gamePin) {
+  if (req.cookies.userId && req.cookies.gamePin) {
     res.send("error, please restart your browser")
   } else {
     const gameExists = await users.gameExists(req.query.gamePin);
     const userExists = await users.userExists(
-      req.query.user,
-      req.query.gamePin);
+      req.query.user,req.query.gamePin);
     if (gameExists && !userExists) {
       let user = new users.User(req.query.user, req.query.gamePin);
       res.cookie("gamePin", user.currentGame);
@@ -57,7 +57,7 @@ app.get("/game/join", async (req, res) => {
 });
 
 app.use("/game/*", (req, res, next) => {
-  !req.cookies.gamePin? res.redirect(307, "/"): next();
+  !req.cookies.gamePin&&!req.cookies.userId? res.redirect(307, "/"): next();
 });
 
 app.get("/game/members", async (req, res) => {
@@ -89,7 +89,7 @@ app.get("/game/play", async (req, res) => {
     const state = await users.gameState(req.cookies.gamePin);
     const user = await users.getUser(req.cookies.userId);
     if (state && !!user) {
-      console.log(userId);
+      console.log(req.cookies);
       res.render(getFilename(user.isHost, "play"), req.cookies);
     } else {
       res.redirect(307, "/game/wait");
