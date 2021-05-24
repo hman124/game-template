@@ -5,8 +5,13 @@
   box-sizing: border-box;
 }
 
+@font-face {
+  src: url(https://cdn.glitch.com/887c9896-8f4a-43f2-989c-68584c8d1c1a%2FRubik-VariableFont_wght.ttf?v=1621893845824);
+  font-family: rubik;
+}
+
 body {
-  font-family: helvetica, arial, sans-serif;
+  font-family: rubik, helvetica, arial, sans-serif;
 }
 
 h1 {

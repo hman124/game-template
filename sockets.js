@@ -18,7 +18,7 @@ module.exports = function(http) {
           game = await db.first("Select * From Games Where gamePin=?", user.currentGame);
         io.to(game.hostId).emit("win", user);
     });
-    
+
     socket.on("startGame", async data => {
       console.log("starting game if creds are right");
       const game = await users.getGame(data['gamePin']);

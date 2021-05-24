@@ -11,7 +11,7 @@ const db = require("./database.js");
 
 const hbs = require("hbs");
 
-hbs.registerPartials(__dirname + '/views/templates');
+hbs.registerPartials(__dirname + '/templates');
 
 app.set("view engine", "hbs");
 
