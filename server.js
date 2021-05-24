@@ -75,10 +75,12 @@ app.get("/api/listdb", async (req, res) => {
 });
 
 app.get("/game/wait", async (req, res) => {
-    const state = await users.gameState(req.cookies.gamePin);
-    const user = await users.getUser(req.cookies.userId);
-    if (!state && !!user) {
-      res.render(getFilename(user.isHost, "wait"), req.cookies);
+    let {userId, gamePin} = req.cookies,
+        status = await users.isUserValid(userId, gamePin),
+        {isStarted} = await db.first("isStarted", "Games", "gamePin=?", gamePin);
+    if (status) {
+      let {isHost} = await db.first("isHost", "Users", "userId=?", userId);
+      res.render(getFilename(isHost, "wait"), req.cookies);
     } else {
       res.redirect(307, "/game/play");
     }

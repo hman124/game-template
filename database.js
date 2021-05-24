@@ -40,9 +40,9 @@ function dbRun(query, ...stmts) {
   });
 }
 
-function dbFirst(query, ...stmts) {
+function dbFirst(selection, table, where, ...stmts) {
   return new Promise((res, rej) => {
-    db.all(query, ...stmts, (err, rows) => {
+    db.all(`Select ${selection} From ${table} Where ${where}`, ...stmts, (err, rows) => {
       if (err) {
         rej(err);
       } else if (rows) {

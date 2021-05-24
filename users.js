@@ -9,18 +9,15 @@ var getGame = pin => db.first("Select * From Games Where gamePin=?", [pin]),
       pin
     ]),
   userExists = async (username, pin) =>
-    !!(await db.first(
-      "Select userId From Users Where screenName=? And currentGame=?",
-      [username, pin]
-    )).userId,
+    !!(await db.first("userId","Users", "screenName=? And currentGame=?", username, pin)).userId,
   gameExists = async pin => !!(await getGame(pin)).hostId,
   gameState = async pin => !!(await getGame(pin)).isStarted;
 
 async function isUserValid(userId, gamePin) {
-  const game = await db.first("Select * From Games Where gamePin=?", gamePin);
-  const isTaken = await db.first("")
+  const game = await db.first("*", "Games", "gamePin=?", gamePin);
+  const user = await db.first("*", "Users", "userId=?", userId);
+  return game && user;
 }
-
 
 class User {
   constructor(screenName, currentGame) {
