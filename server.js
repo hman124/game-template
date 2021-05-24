@@ -30,14 +30,12 @@ app.get("/play", (req, res) => {
 app.get("/game/new", (req, res) => {
   let user = new users.User(req.query.user),
       game = new users.Game(user);
-  console.log(user.userId == game.hostId);
   res.cookie("userId", user.userId);
   res.cookie("gamePin", game.gamePin);
   res.redirect(307, "/game/wait");
 });
 
 app.get("/game/join", async (req, res) => {
-  
   if (req.cookies.userId && req.cookies.gamePin) {
     await db.run("Delete From Users Where userId=?", userId);
     res.cookie("userId", {maxAge:0});
@@ -58,20 +56,29 @@ app.get("/game/join", async (req, res) => {
     }
 });
 
-app.use("/game/*", async (req, res, next) => {
-  if(!req.cookies.gamePin&&!req.cookies.userId) {res.redirect(307, "/")}
-  else {
-    let isUserValid = 
-    let user = await db.first("*", "Users", "userId=?", req.cookies.userId),
-        game = await db.first("*", "Games", "gamePin=?", req.cookies.gamePin);
-    req.game = game;
-    req.user = user;
-    next();}
+app.use(async (req, res, next) => {
+  //check to make sure that the user is valid. If so, save the details in the request
+  if (!req.cookies.gamePin && !req.cookies.userId) {
+    res.redirect(307, "/");
+  } else {
+    let { userId, gamePin } = req.cookies,
+        isUserValid = await users.isUserValid(userId, gamePin);
+    if (isUserValid) {
+      req.game = await db.first("*", "Games", "gamePin=?", gamePin);
+      req.user = await db.first("*", "Users", "userId=?", userId);
+      next();
+    } else {
+      res.redirect(307, "/?error=true");
+    }
+  }
+});
+
+app.get("/linkgame.js", (req, res) => {
+  res.render(__dirname + "/public/linkgame.js", req.cookies);
 });
 
 app.get("/game/members", async (req, res) => {
-  const user = await users.getUser(req.cookies.userId);
-  if (user.isHost) {
+  if (req.user.isHost) {
     res.send(await users.getMembers(req.cookies.gamePin));
   } else {
     res.sendStatus(404);
@@ -84,33 +91,25 @@ app.get("/api/listdb", async (req, res) => {
 });
 
 app.get("/game/wait", async (req, res) => {
-    let {userId, gamePin} = req.cookies,
-        status = await users.isUserValid(userId, gamePin),
-        {isStarted} = await db.first("isStarted", "Games", "gamePin=?", gamePin);
-    if (status) {
-      let {isHost} = await db.first("isHost", "Users", "userId=?", userId);
-      res.render(getFilename(isHost, "wait"), req.cookies);
+    if (!req.game.isStarted) {
+      res.render(getFilename(req.user.isHost, "wait"), req.cookies);
     } else {
       res.redirect(307, "/game/play");
     }
 });
 
 app.get("/game/play", async (req, res) => {
-    const state = await users.gameState(req.cookies.gamePin);
-    const user = await users.getUser(req.cookies.userId);
-    if (state && !!user) {
-      res.render(getFilename(user.isHost, "play"), req.cookies);
+    if (req.game.isStarted) {
+      res.render(getFilename(req.user.isHost, "play"), req.cookies);
     } else {
       res.redirect(307, "/game/wait");
     }
 });
 
 function getFilename(isHost, filename) {
-  if (isHost) {
-    return `${__dirname}/views/host/${filename}.hbs`;
-  } else {
-    return `${__dirname}/views/player/${filename}.hbs`;
-  }
+  return isHost? 
+    `${__dirname}/views/host/${filename}.hbs`:
+    `${__dirname}/views/player/${filename}.hbs`;
 }
 
 app.get("/api/cleardb", async (req, res) => {

@@ -9,3 +9,5 @@ function linkGame(gamePin, userId) {
     window.location.replace("/game/play");
   });
 }
+
+window.onload = 
