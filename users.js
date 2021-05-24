@@ -1,9 +1,8 @@
 const db = require("./database.js");
 const crypto = require("crypto");
 
-var getGame = async pin =>
-    await db.first("Select * From Games Where gamePin=?", [pin]),
-  getUser = async id =>
+var getGame = pin => db.first("Select * From Games Where gamePin=?", [pin]),
+    getUser = async id =>
     await db.first("Select * From Users Where userId=?", [id]),
   getMembers = async pin =>
     await db.all("Select * From Users Where currentGame=?", [
@@ -16,6 +15,13 @@ var getGame = async pin =>
     )).userId,
   gameExists = async pin => !!(await getGame(pin)).hostId,
   gameState = async pin => !!(await getGame(pin)).isStarted;
+
+async function isUserValid(userId, gamePin) {
+  const game = await db.first("Select * From Games Where gamePin=?", gamePin);
+  const isTaken = await db.first("")
+}
+
+
 class User {
   constructor(screenName, currentGame) {
     this.userId = crypto.randomBytes(8).toString("hex");
@@ -58,7 +64,7 @@ module.exports = {
   gameExists: gameExists,
   userExists: userExists,
   gameState: gameState,
-  getGame: getGame,
+  getGame:  getGame,
   getUser: getUser,
   getMembers: getMembers
 };

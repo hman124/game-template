@@ -82,7 +82,6 @@ app.get("/game/wait", async (req, res) => {
     } else {
       res.redirect(307, "/game/play");
     }
-  
 });
 
 app.get("/game/play", async (req, res) => {
