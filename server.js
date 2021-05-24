@@ -4,7 +4,7 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 
 const http = require("http").createServer(app);
-const socket = require("./sockets.js")(http);
+const io = require("./sockets.js")(http);
 
 const users = require("./users.js");
 const db = require("./database.js");
@@ -14,6 +14,8 @@ const hbs = require("hbs");
 hbs.registerPartials(__dirname + "/templates");
 
 app.set("view engine", "hbs");
+
+
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
