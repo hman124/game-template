@@ -1,7 +1,9 @@
 const express = require("express");
 const app = express();
+
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
+const hbs = require("hbs");
 
 const http = require("http").createServer(app);
 const io = require("./sockets.js")(http);
@@ -9,13 +11,10 @@ const io = require("./sockets.js")(http);
 const users = require("./users.js");
 const db = require("./database.js");
 
-const hbs = require("hbs");
 
 hbs.registerPartials(__dirname + "/templates");
 
 app.set("view engine", "hbs");
-
-
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -54,7 +53,7 @@ app.post("/game/join", async (req, res) => {
     res.cookie("userId", user.userId);
     res.redirect(303, "/game/wait");
   } else if (usertaken.userId) {
-    res.redirect("/play?taken=true");
+    res.redirect(307, "/play?taken=true");
   } else {
     res.send("Game Doesn't Exist");
   }
