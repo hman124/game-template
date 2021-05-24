@@ -89,6 +89,7 @@ app.get("/game/play", async (req, res) => {
     const state = await users.gameState(req.cookies.gamePin);
     const user = await users.getUser(req.cookies.userId);
     if (state && !!user) {
+      console.log(userId);
       res.render(getFilename(user.isHost, "play"), req.cookies);
     } else {
       res.redirect(307, "/game/wait");
