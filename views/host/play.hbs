@@ -22,7 +22,7 @@
       });
       
       socket.on("win", win => {
-       
+        alert(win.screenName);
         var li = document.createElement("li");
         li.innerHTML = `${nextPlace}. ${win.screenName}`;
         document.querySelector("#thing").appendChild(li);
@@ -30,12 +30,12 @@
       }); 
       
       var addUnload = () => {
-   window.addEventListener('beforeunload', function(e) {
-    e.preventDefault();
-    e.returnValue = '';
-   });
-  window.removeEventListener("click", addUnload);
-}
+        window.addEventListener('beforeunload', function(e) {
+          e.preventDefault();
+          e.returnValue = '';
+        });
+        window.removeEventListener("click", addUnload);
+      }
  window.addEventListener("click", addUnload);
     </script>
   </body>
