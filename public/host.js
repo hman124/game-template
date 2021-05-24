@@ -1,5 +1,4 @@
 function setup(gamePin, userId) {
-  var socket = io();
   document.querySelector("#start").addEventListener("click", () => {
     socket.emit("startGame", {
       gamePin: gamePin,

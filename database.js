@@ -13,6 +13,9 @@ db.serialize(() => {
   }
 });
 
+//db.run("Delete From Games Where 1")
+//db.run("Delete From Users Where 1")
+
 function dbAll(query, ...stmts) {
   return new Promise((res, rej) => {
     db.all(query, ...stmts, (err, rows) => {

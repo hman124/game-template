@@ -12,9 +12,9 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="/linkgame.js"></script>
     <script>
+      window.onerror = alert;
       linkGame("{{gamePin}}","{{userId}}");
-      var socket = io(),
-          nextPlace = 1;
+      var nextPlace = 1;
      
       /*socket.on("newUpdate", update => {
         var li = document.createElement("li");
@@ -23,7 +23,6 @@
       });*/
       
       socket.on("win", win => {
-        alert("test");
         var li = document.createElement("li");
         li.innerHTML = `${nextPlace}. ${win.screenName}`;
         document.querySelector("#thing").appendChild(li);

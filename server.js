@@ -38,6 +38,8 @@ app.get("/game/new", (req, res) => {
 
 app.get("/game/join", async (req, res) => {
   if (req.cookies.userId && req.cookies.gamePin) {
+    res.cookie("userId", {maxAge:0});
+    
     res.send("error, please restart your browser")
   } else {
     const gameExists = await users.gameExists(req.query.gamePin);

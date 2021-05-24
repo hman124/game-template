@@ -7,10 +7,8 @@ module.exports = function(http) {
   io.on("connect", socket => {
     socket.on("linkGame", data => {
       io.to(data[0]).emit("newUser");
-      console.log(data);
       socket.join(data[0]);
       socket.join(data[1]);
-      io.to(data[1]).emit("win", {screenName:"test"});
     });
     
     socket.on("win", async userId => {
