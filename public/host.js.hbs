@@ -1,4 +1,4 @@
-function setup(gamePin, userId) {
+function setup("{{gamePin}}", "{{userId}}") {
   document.querySelector("#start").addEventListener("click", () => {
     socket.emit("startGame", {
       gamePin: gamePin,
@@ -6,9 +6,7 @@ function setup(gamePin, userId) {
     });
   });
 
-  socket.on("newUser", () => {
-    updatePlayers();
-  });
+  socket.on("newUser", updatePlayers;
 
   socket.on("gameStartSuccess", () => {
     window.location.replace("/game/play");
@@ -16,10 +14,6 @@ function setup(gamePin, userId) {
 
   socket.on("gameStartFailure", () => {
     alert("Game failed to start... try making a new game ( or not hacking into my code :) )");
-  });
-  
-  socket.on("win", user => {
-    
   });
 
   async function updatePlayers() {

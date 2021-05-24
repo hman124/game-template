@@ -11,5 +11,10 @@
     <h3>You are in the game. You should see your name on the host's screen.
       Now all you have to do is wait for the host to start the game!</h3>
     {{> body}}
+    <script>
+    socket.on("gameStartSuccess", () => {
+      window.location.replace("/game/play");
+    });
+    </script>
   </body>
 </html>

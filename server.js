@@ -43,7 +43,7 @@ app.get("/game/join", async (req, res) => {
     res.cookie("userId", {maxAge:0});
     res.cookie("gamePin", {maxAge:0});
   } 
-    const gameExists = await users.gameExists(req.query.gamePin);
+    const gameExists = await db.first("*", "Games", "gamereq.query.gamePin);
     const userExists = await users.userExists(
       req.query.user,req.query.gamePin);
     if (gameExists && !userExists) {
@@ -78,6 +78,11 @@ app.use(async (req, res, next) => {
 app.get("/linkgame.js", (req, res) => {
   res.type("text/javascript");
   res.render(__dirname + "/public/linkgame.js.hbs", req.cookies);
+});
+
+app.get("/host.js", (req, res) => {
+  res.type("text/javascript");
+  res.render(__dirname + "/public/host.js.hbs", req.cookies);
 });
 
 app.get("/game/members", async (req, res) => {
