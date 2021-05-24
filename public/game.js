@@ -91,11 +91,18 @@
     var shape = evt.target;
     layer.find("." + shape.name()).forEach(x => {
       if (x.children.length) {
-        window.confirm('Choose "' + list[shape.name()] + '"?');
+        window.confirm('Are you sure you want to select "' + list[shape.name()] + '"?');
       }
       layer.draw();
     });
   }
   stage.add(layer);
   layer.draw();
+  
+  var objectives = [
+    {"question":  "Find the amendment that gave freed slaves the right to vote",
+     "answer": ""}
+  ];
+  
+  var socket = io();
 })();
