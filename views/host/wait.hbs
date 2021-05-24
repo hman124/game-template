@@ -8,7 +8,7 @@
   <body>
     <div class="instructions">
     <h3 class="link">Go to <span id="domain">Loading...</span>/play and enter the pin:</h3>
-    <h1>{{gamePin}}</h1>
+    <h1 class="pin">{{gamePin}}</h1>
     <div style="clear:both;"></div>
     </div>
     <h1>Currently in the Game:</h1>
@@ -17,11 +17,5 @@
     <input type="button" id="start" value="Start Game">
     {{> body}}
     <script src="/host.js"></script>
-    <script>
-      window.onerror = alert;
-      var params = ["{{gamePin}}","{{userId}}"];
-      setup(...params);
-    </script>
-
   </body>
 </html>

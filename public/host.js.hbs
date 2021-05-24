@@ -1,11 +1,8 @@
-function setup("{{gamePin}}", "{{userId}}") {
-  document.querySelector("#start").addEventListener("click", () => {
+document.querySelector("#start").addEventListener("click", () => {
     socket.emit("startGame", {
-      gamePin: gamePin,
-      auth: userId
+      gamePin: "{{gamePin}}",
+      auth: "{{userId}}"
     });
-  });
-
   socket.on("newUser", updatePlayers;
 
   socket.on("gameStartSuccess", () => {
@@ -28,8 +25,8 @@ function setup("{{gamePin}}", "{{userId}}") {
     });
   }
 
-  window.addEventListener("load", updatePlayers);
-
-  document.querySelector("#domain").innerHTML =
-    window.location.protocol + "//" + window.location.host;
-}
+  window.addEventListener("load", () => {
+    updatePlayers();
+    document.querySelector("#domain").innerHTML =
+      window.location.protocol + "//" + window.location.host;
+});

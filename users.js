@@ -1,18 +1,6 @@
 const db = require("./database.js");
 const crypto = require("crypto");
 
-var getGame = pin => db.first("Select * From Games Where gamePin=?", [pin]),
-    getUser = async id =>
-    await db.first("Select * From Users Where userId=?", [id]),
-  getMembers = async pin =>
-    await db.all("Select * From Users Where currentGame=?", [
-      pin
-    ]),
-  userExists = async (username, pin) =>
-    !!(await db.first("userId","Users", "screenName=? And currentGame=?", username, pin)).userId,
-  gameExists = async pin => !!(await getGame(pin)).hostId,
-  gameState = async pin => !!(await getGame(pin)).isStarted;
-
 async function isUserValid(userId, gamePin) {
   const game = await db.first("*", "Games", "gamePin=?", gamePin);
   const user = await db.first("*", "Users", "userId=?", userId);
@@ -58,10 +46,5 @@ class Game {
 module.exports = {
   User: User,
   Game: Game,
-  userExists: userExists,
-  gameState: gameState,
-  getGame:  getGame,
-  getUser: getUser,
-  getMembers: getMembers,
   isUserValid: isUserValid
 };
