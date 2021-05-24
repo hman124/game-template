@@ -109,7 +109,7 @@
     },
     {
       question: "Find the act that was signed by Dwight D. Eisenhower in 1964",
-      answer: list[22]
+      answer: list[18]
     },
     {
       question: "Find the amendment that freed former slaves.",

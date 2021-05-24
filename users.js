@@ -4,7 +4,7 @@ const crypto = require("crypto");
 async function isUserValid(userId, gamePin) {
   const game = await db.first("*", "Games", "gamePin=?", gamePin);
   const user = await db.first("*", "Users", "userId=?", userId);
-  return game && user;
+  return game.gamePin && user.userId;
 }
 
 class User {

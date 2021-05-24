@@ -5,19 +5,16 @@
     <title>Civilpaper - Playing game</title>
   </head>
   <body>
-    <h1>Complete all objectives to win!</h1>
+    <h1>Complete the objective to win!</h1> <p>
+    Game Pin:
+    {{gamePin}}
+    </p>
     <hr>
     <h1>Leaderboard:</h1>
     <ol id="thing"></ol>
     {{> body}}
     <script>
       window.onerror = alert;
-      /*socket.on("newUpdate", update => {
-        var li = document.createElement("li");
-        li.innerHTML = `<b>${update.user}</b> ${update.text}`;
-        document.querySelector("#updates").appendChild(li);
-      });*/
-      
       socket.on("win", win => {
         var li = document.createElement("li");
         li.innerHTML = win.screenName;
