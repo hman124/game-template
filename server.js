@@ -38,7 +38,7 @@ app.get("/play", (req, res) => {
 });
 
 app.post("/game/new", (req, res) => {
-  let user = new users.User(req.query.user),
+  let user = new users.User(req.body.user),
     game = new users.Game(user);
   res.cookie("userId", user.userId);
   res.cookie("gamePin", game.gamePin);
@@ -46,14 +46,14 @@ app.post("/game/new", (req, res) => {
 });
 
 app.post("/game/join", async (req, res) => {
-  if (req.cookies.userId && req.cookies.gamePin) {
+  if (req.cookies.userId || req.cookies.gamePin) {
     await db.run("Delete From Users Where userId=?", req.cookies.userId);
-    res.cookie("userId", { maxAge: 0 });
-    res.cookie("gamePin", { maxAge: 0 });
+    res.cookie("gamePin", "", { maxAge: 0 });
+    res.cookie("userId", "", { maxAge: 0 });
   }
   let { gamePin, user } = req.body,
     game = await db.first("hostId", "Games", "gamePin=?", gamePin),
-    usertaken = await db.first("userId", "Users", "screenName=? And gamePin=?",user,gamePin);
+    usertaken = await db.first("userId", "Users", "screenName=? And currentGame=?",user,gamePin);
   if (game.hostId && !user) {
     let user = new users.User(user, gamePin);
     res.cookie("gamePin", user.currentGame);
@@ -95,7 +95,7 @@ app.get("/host.js", (req, res) => {
 
 app.get("/game/members", async (req, res) => {
   if (req.user.isHost) {
-    res.send(await db.all("screenName", "Users", "currentGame=?", req.game.gamePin));
+    res.send(await db.all("*", "Users", "currentGame=?", req.game.gamePin));
   } else {
     res.sendStatus(404);
   }

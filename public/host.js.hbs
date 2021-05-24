@@ -3,7 +3,8 @@ document.querySelector("#start").addEventListener("click", () => {
       gamePin: "{{gamePin}}",
       auth: "{{userId}}"
     });
-  socket.on("newUser", updatePlayers;
+});
+  socket.on("newUser", updatePlayers);
 
   socket.on("gameStartSuccess", () => {
     window.location.replace("/game/play");

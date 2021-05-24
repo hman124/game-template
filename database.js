@@ -1,4 +1,4 @@
-const dbFile = "./.data/gamev1.1.db";
+const dbFile = "./.data/gamev1.2.db";
 const fs = require("fs");
 const exists = fs.existsSync(dbFile);
 const sqlite3 = require("sqlite3").verbose();
@@ -16,9 +16,9 @@ db.serialize(() => {
 //db.run("Delete From Games Where 1")
 //db.run("Delete From Users Where 1")
 
-function dbAll(query, ...stmts) {
+function dbAll(selection, table, where, ...stmts) {
   return new Promise((res, rej) => {
-    db.all(query, ...stmts, (err, rows) => {
+    db.all(`Select ${selection} From ${table} Where ${where}`, ...stmts, (err, rows) => {
       if (err) {
         rej(err);
       } else {
