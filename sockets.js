@@ -10,6 +10,14 @@ module.exports = function(http) {
       socket.join(data[0]);
       socket.join(data[1]);
     });
+    socket.on("win", async userId => {
+      var user = await users.getUser(userId),
+          game = await users.getGame(user.gamePin);
+      if(user.userId && game.gamePin) {
+        io.to(game.hostId).emit("hostwin", user);
+      }
+    });
+    socket.on("hostwin")
     socket.on("startGame", async data => {
       console.log("starting game if creds are right");
       const game = await users.getGame(data['gamePin']);

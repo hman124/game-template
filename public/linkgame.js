@@ -1,4 +1,5 @@
 function linkGame(gamePin, userId) {
+  window["userId"] = userId;
   var socket = io();
   socket.on("connect", async () => {
     socket.emit("linkGame", [gamePin, userId]);
@@ -10,7 +11,6 @@ function linkGame(gamePin, userId) {
 }
 
 var addUnload = () => {
-  console.log("added");
    window.addEventListener('beforeunload', function(e) {
     e.preventDefault();
     e.returnValue = '';

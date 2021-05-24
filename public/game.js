@@ -101,8 +101,23 @@
   
   var objectives = [
     {"question":  "Find the amendment that gave freed slaves the right to vote",
-     "answer": ""}
+     "answer": list[15]},
+    {"question": "Name the act that was signed by Dwight D. Eisenhower in 1964",
+    "answer": list[22]}
   ];
   
-  var socket = io();
+  var socket = io(),
+      option = Math.floor(Math.random()*objectives.length);
+  
+  window.addEventListener("load", () => {
+    alert("Your Objective: " + objectives[option].question);
+  });
+  
+  function answer(response) {
+    if(response == objectives[option]["answer"]) {
+      socket.emit("win", userId);
+    } else {
+      alert("try again");
+    }
+  }
 })();
