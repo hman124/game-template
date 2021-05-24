@@ -11,11 +11,12 @@ module.exports = function(http) {
       socket.join(data[1]);
     });
     socket.on("win", async userId => {
-      var user = await users.getUser(userId),
-          game = await users.getGame(user[0].gamePin);
+      var user = await db.first("Select * From Users Where userId=?", userId),
+          game = await db.first("Select * From Games Where gamePin", user.gamePin);
       console.log(user,game);
       if(user.userId && game.gamePin) {
-        io.to(game.hostId).emit("hostwin", user);
+        
+        io.to(game.hostId).emit("win", user);
       }
     });
     socket.on("startGame", async data => {

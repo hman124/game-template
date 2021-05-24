@@ -8,7 +8,7 @@
     <h1>Complete all objectives to win!</h1>
     <hr>
     <h1>Leaderboard:</h1>
-    <ul></ul>
+    <ul id="thing"></ul>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/linkgame.js"></script>
     <script>
@@ -22,10 +22,13 @@
       });
       
       socket.on("win", win => {
+       
         var li = document.createElement("li");
         li.innerHTML = `${nextPlace}. ${win.screenName}`;
+        document.querySelector("#thing").appendChild(li);
         nextPlace++;
-      });  
+      }); 
+      
       var addUnload = () => {
    window.addEventListener('beforeunload', function(e) {
     e.preventDefault();
