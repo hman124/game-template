@@ -19,9 +19,10 @@
     <script src="/host.js"></script>
     <script src="/linkgame.js"></script>
     <script>
+      window.onerror = alert;
       var params = ["{{gamePin}}","{{userId}}"];
       linkGame(...params);
-      setup(...params)
+      setup(...params);
     </script>
 
   </body>

@@ -91,7 +91,6 @@
     var shape = evt.target;
     layer.find("." + shape.name()).forEach(x => {
       if (x.children.length) {
-        window.confirm('Are you sure you want to select "' + list[shape.name()] + '"?');
         answer(list[shape.name()]);
       }
       layer.draw();
@@ -121,7 +120,6 @@
       socket.emit("win", userId);
       document.querySelector("#container").innerHTML = "Done!";
     } else {
-      alert("try again");
     }
   }
 })();
