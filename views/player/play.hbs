@@ -8,16 +8,7 @@
     <div id="container"></div>
     <script src="https://unpkg.com/konva@7.0.3/konva.min.js"></script>
     {{> body}}
-    <script>
-  var addUnload = () => {
-   window.addEventListener('beforeunload', function(e) {
-    e.preventDefault();
-    e.returnValue = '';
-   });
-  window.removeEventListener("click", addUnload);
-}
- window.addEventListener("click", addUnload);
-    </script>
+    <script src="/onunload.js"></script>
     <script src="/game.js"></script>
   </body>
 </html>

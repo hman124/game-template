@@ -48,16 +48,16 @@ app.post("/game/new", (req, res) => {
 app.post("/game/join", async (req, res) => {
   if (req.cookies.userId || req.cookies.gamePin) {
     await db.run("Delete From Users Where userId=?", req.cookies.userId);
-    res.cookie("gamePin", "", { maxAge: 0 });
-    res.cookie("userId", "", { maxAge: 0 });
+   // res.cookie("gamePin", "", { maxAge: 0 });
+   //res.cookie("userId", "", { maxAge: 0 });
   }
   let { gamePin, user } = req.body,
     game = await db.first("hostId", "Games", "gamePin=?", gamePin),
     usertaken = await db.first("userId", "Users", "screenName=? And currentGame=?",user,gamePin);
-  if (game.hostId && !user) {
-    let user = new users.User(user, gamePin);
-    res.cookie("gamePin", user.currentGame);
-    res.cookie("userId", user.userId);
+  if (game.hostId && !usertaken.userId) {
+    let newuser = new users.User(user, gamePin);
+    res.cookie("gamePin", newuser.currentGame);
+    res.cookie("userId", newuser.userId);
     res.redirect(303, "/game/wait");
   } else if (usertaken.userId) {
     res.redirect(307, "/play?taken=true");
