@@ -20,8 +20,7 @@ module.exports = function(http) {
     });
 
     socket.on("startGame", async data => {
-      console.log("starting game if creds are right");
-      const game = await users.getGame(data['gamePin']);
+      const game = await db.first("*", "Games", "gamePin"data['gamePin']);
       if(game && game.hostId == data['auth']) {
         await db.run("Update Games Set isStarted=1 Where gamePin=?", [data['gamePin']]);
         io.to(data['gamePin']).emit("gameStartSuccess");

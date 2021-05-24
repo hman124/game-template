@@ -49,7 +49,7 @@ function dbFirst(selection, table, where, ...stmts) {
         if (rows.length) {
           res(rows[0]);
         } else {
-          res([]);
+          res({});
         }
       }
     });

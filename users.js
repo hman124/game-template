@@ -58,7 +58,6 @@ class Game {
 module.exports = {
   User: User,
   Game: Game,
-  gameExists: gameExists,
   userExists: userExists,
   gameState: gameState,
   getGame:  getGame,

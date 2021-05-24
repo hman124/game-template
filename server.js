@@ -11,7 +11,7 @@ const db = require("./database.js");
 
 const hbs = require("hbs");
 
-hbs.registerPartials(__dirname + '/templates');
+hbs.registerPartials(__dirname + "/templates");
 
 app.set("view engine", "hbs");
 
@@ -29,33 +29,33 @@ app.get("/play", (req, res) => {
   res.sendFile(`${__dirname}/views/join.html`);
 });
 
-app.get("/game/new", (req, res) => {
+app.post("/game/new", (req, res) => {
   let user = new users.User(req.query.user),
-      game = new users.Game(user);
+    game = new users.Game(user);
   res.cookie("userId", user.userId);
   res.cookie("gamePin", game.gamePin);
-  res.redirect(307, "/game/wait");
+  res.redirect(303, "/game/wait");
 });
 
-app.get("/game/join", async (req, res) => {
+app.post("/game/join", async (req, res) => {
   if (req.cookies.userId && req.cookies.gamePin) {
-    await db.run("Delete From Users Where userId=?", userId);
-    res.cookie("userId", {maxAge:0});
-    res.cookie("gamePin", {maxAge:0});
-  } 
-    const gameExists = await db.first("*", "Games", "gamereq.query.gamePin);
-    const userExists = await users.userExists(
-      req.query.user,req.query.gamePin);
-    if (gameExists && !userExists) {
-      let user = new users.User(req.query.user, req.query.gamePin);
-      res.cookie("gamePin", user.currentGame);
-      res.cookie("userId", user.userId);
-      res.redirect(307, "/game/wait");
-    } else if (userExists) {
-      res.redirect("/play?taken=true");
-    } else {
-      res.send("Game Doesn't Exist");
-    }
+    await db.run("Delete From Users Where userId=?", req.cookies.userId);
+    res.cookie("userId", { maxAge: 0 });
+    res.cookie("gamePin", { maxAge: 0 });
+  }
+  let { gamePin, user } = req.body,
+    game = await db.first("hostId", "Games", "gamePin=?", gamePin),
+    userExists = await db.first("userId", "Users", "screenName=? And gamePin=?",user,gamePin);
+  if (game.hostId && !user) {
+    let user = new users.User(user, gamePin);
+    res.cookie("gamePin", user.currentGame);
+    res.cookie("userId", user.userId);
+    res.redirect(303, "/game/wait");
+  } else if (userExists) {
+    res.redirect("/play?taken=true");
+  } else {
+    res.send("Game Doesn't Exist");
+  }
 });
 
 app.use(async (req, res, next) => {
@@ -64,7 +64,7 @@ app.use(async (req, res, next) => {
     res.redirect(307, "/");
   } else {
     let { userId, gamePin } = req.cookies,
-        isUserValid = await users.isUserValid(userId, gamePin);
+      isUserValid = await users.isUserValid(userId, gamePin);
     if (isUserValid) {
       req.game = await db.first("*", "Games", "gamePin=?", gamePin);
       req.user = await db.first("*", "Users", "userId=?", userId);
@@ -87,7 +87,7 @@ app.get("/host.js", (req, res) => {
 
 app.get("/game/members", async (req, res) => {
   if (req.user.isHost) {
-    res.send(await users.getMembers(req.cookies.gamePin));
+    res.send(await db.all("screenName", "Users", "currentGame=?", req.game.gamePin));
   } else {
     res.sendStatus(404);
   }
@@ -99,25 +99,25 @@ app.get("/api/listdb", async (req, res) => {
 });
 
 app.get("/game/wait", async (req, res) => {
-    if (!req.game.isStarted) {
-      res.render(getFilename(req.user.isHost, "wait"), req.cookies);
-    } else {
-      res.redirect(307, "/game/play");
-    }
+  if (!req.game.isStarted) {
+    res.render(getFilename(req.user.isHost, "wait"), req.cookies);
+  } else {
+    res.redirect(307, "/game/play");
+  }
 });
 
 app.get("/game/play", async (req, res) => {
-    if (req.game.isStarted) {
-      res.render(getFilename(req.user.isHost, "play"), req.cookies);
-    } else {
-      res.redirect(307, "/game/wait");
-    }
+  if (req.game.isStarted) {
+    res.render(getFilename(req.user.isHost, "play"), req.cookies);
+  } else {
+    res.redirect(307, "/game/wait");
+  }
 });
 
 function getFilename(isHost, filename) {
-  return isHost? 
-    `${__dirname}/views/host/${filename}.hbs`:
-    `${__dirname}/views/player/${filename}.hbs`;
+  return isHost
+    ? `${__dirname}/views/host/${filename}.hbs`
+    : `${__dirname}/views/player/${filename}.hbs`;
 }
 
 app.get("/api/cleardb", async (req, res) => {
