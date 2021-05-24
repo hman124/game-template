@@ -11,6 +11,8 @@ const db = require("./database.js");
 
 const hbs = require("hbs");
 
+hbs.registerPartials(__dirname + '/views/templates');
+
 app.set("view engine", "hbs");
 
 app.use(cookieParser());
@@ -74,7 +76,8 @@ app.use(async (req, res, next) => {
 });
 
 app.get("/linkgame.js", (req, res) => {
-  res.render(__dirname + "/public/linkgame.js", req.cookies);
+  res.type("text/javascript");
+  res.render(__dirname + "/public/linkgame.js.hbs", req.cookies);
 });
 
 app.get("/game/members", async (req, res) => {

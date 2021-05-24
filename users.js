@@ -63,5 +63,6 @@ module.exports = {
   gameState: gameState,
   getGame:  getGame,
   getUser: getUser,
-  getMembers: getMembers
+  getMembers: getMembers,
+  isUserValid: isUserValid
 };

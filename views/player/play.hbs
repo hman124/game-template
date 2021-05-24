@@ -1,16 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>civilpaper</title>
-    <link rel="stylesheet" href="/style.css">
+    {{> head}}
+    <title>Civilpaper - Playing Game</title>
   </head>
   <body>
     <div id="container"></div>
     <script src="https://unpkg.com/konva@7.0.3/konva.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/linkgame.js"></script>
+    {{> body}}
     <script>
-      linkGame("{{gamePin}}","{{userId}}");
   var addUnload = () => {
    window.addEventListener('beforeunload', function(e) {
     e.preventDefault();

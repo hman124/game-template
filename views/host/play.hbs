@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Civilpaper - playing game</title>
-    <style>
-          
-    </style>
+    {{> head}}
+    <title>Civilpaper - Playing game</title>
   </head>
   <body>
     <h1>Complete all objectives to win!</h1>
-    <hr>qw
+    <hr>
     <h1>Leaderboard:</h1>
     <ol id="thing"></ol>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/linkgame.js"></script>
+    {{> body}}
     <script>
       window.onerror = alert;
-      linkGame("{{gamePin}}","{{userId}}");
-      
       /*socket.on("newUpdate", update => {
         var li = document.createElement("li");
         li.innerHTML = `<b>${update.user}</b> ${update.text}`;

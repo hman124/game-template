@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="/style.css">
+    {{> head}}
     <link rel="stylesheet" href="/host.css">
-    <meta name="viewport" content="width=device-width, initial-scale-1.0">
     <title>CivilPaper - Hosting Game</title>
   </head>
   <body>
@@ -16,13 +15,11 @@
     <ul id="players"></ul><br>
     <small>Psst! just click on someone to kick them out of the game!</small><br>
     <input type="button" id="start" value="Start Game">
-    <script src="/socket.io/socket.io.js"></script>
+    {{> body}}
     <script src="/host.js"></script>
-    <script src="/linkgame.js"></script>
     <script>
       window.onerror = alert;
       var params = ["{{gamePin}}","{{userId}}"];
-      linkGame(...params);
       setup(...params);
     </script>
 
