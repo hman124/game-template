@@ -3,19 +3,21 @@
   <head>
     <title>Civilpaper - playing game</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+          
+    </style>
   </head>
   <body>
     <h1>Complete all objectives to win!</h1>
     <hr>
     <h1>Leaderboard:</h1>
-    <ul id="thing"></ul>{{userId}}
+    <ol id="thing"></ol>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/linkgame.js"></script>
     <script>
       window.onerror = alert;
       linkGame("{{gamePin}}","{{userId}}");
-      var nextPlace = 1;
-     
+      
       /*socket.on("newUpdate", update => {
         var li = document.createElement("li");
         li.innerHTML = `<b>${update.user}</b> ${update.text}`;
@@ -24,11 +26,10 @@
       
       socket.on("win", win => {
         var li = document.createElement("li");
-        li.innerHTML = `${nextPlace}. ${win.screenName}`;
+        li.innerHTML = win.screenName;
         document.querySelector("#thing").appendChild(li);
-        nextPlace++;
       }); 
-     /* 
+     
       var addUnload = () => {
         window.addEventListener('beforeunload', function(e) {
           e.preventDefault();
@@ -36,7 +37,7 @@
         });
         window.removeEventListener("click", addUnload);
       }
- window.addEventListener("click", addUnload);*/
+ window.addEventListener("click", addUnload);
     </script>
   </body>
 </html>

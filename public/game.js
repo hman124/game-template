@@ -103,8 +103,10 @@
   var objectives = [
     {"question":  "Find the amendment that gave freed slaves the right to vote",
      "answer": list[15]},
-    {"question": "Name the act that was signed by Dwight D. Eisenhower in 1964",
-    "answer": list[22]}
+    {"question": "Find the act that was signed by Dwight D. Eisenhower in 1964",
+    "answer": list[22]},
+    {"question": "Find the amendment that freed former slaves.",
+    "answer":list[17]}
   ];
   
   var socket = io(),

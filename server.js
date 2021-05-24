@@ -39,9 +39,8 @@ app.get("/game/new", (req, res) => {
 app.get("/game/join", async (req, res) => {
   if (req.cookies.userId && req.cookies.gamePin) {
     res.cookie("userId", {maxAge:0});
-    
-    res.send("error, please restart your browser")
-  } else {
+    res.cookie("gamePin", {maxAge:0});
+  } 
     const gameExists = await users.gameExists(req.query.gamePin);
     const userExists = await users.userExists(
       req.query.user,req.query.gamePin);
@@ -55,7 +54,6 @@ app.get("/game/join", async (req, res) => {
     } else {
       res.send("Game Doesn't Exist");
     }
-  }
 });
 
 app.use("/game/*", (req, res, next) => {
