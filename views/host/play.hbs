@@ -15,20 +15,21 @@
       linkGame("{{gamePin}}","{{userId}}");
       var socket = io(),
           nextPlace = 1;
-      socket.on("newUpdate", update => {
+     
+      /*socket.on("newUpdate", update => {
         var li = document.createElement("li");
         li.innerHTML = `<b>${update.user}</b> ${update.text}`;
         document.querySelector("#updates").appendChild(li);
-      });
+      });*/
       
       socket.on("win", win => {
-        alert(win.screenName);
+        alert("test");
         var li = document.createElement("li");
         li.innerHTML = `${nextPlace}. ${win.screenName}`;
         document.querySelector("#thing").appendChild(li);
         nextPlace++;
       }); 
-      
+     /* 
       var addUnload = () => {
         window.addEventListener('beforeunload', function(e) {
           e.preventDefault();
@@ -36,7 +37,7 @@
         });
         window.removeEventListener("click", addUnload);
       }
- window.addEventListener("click", addUnload);
+ window.addEventListener("click", addUnload);*/
     </script>
   </body>
 </html>

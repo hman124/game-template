@@ -1,7 +1,7 @@
 function linkGame(gamePin, userId) {
   window["userId"] = userId;
   var socket = io();
-  socket.on("connect", async () => {
+  socket.on("connect", () => {
     socket.emit("linkGame", [gamePin, userId]);
   });
 

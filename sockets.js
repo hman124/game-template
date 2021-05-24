@@ -7,17 +7,17 @@ module.exports = function(http) {
   io.on("connect", socket => {
     socket.on("linkGame", data => {
       io.to(data[0]).emit("newUser");
+      console.log(data);
       socket.join(data[0]);
       socket.join(data[1]);
+      io.to(data[1]).emit("win", {screenName:"test"});
     });
     
     socket.on("win", async userId => {
       var user = await db.first("Select * From Users Where userId=?", userId),
           game = await db.first("Select * From Games Where gamePin=?", user.currentGame);
-        console.log(game);
-      if(user.userId && game.gamePin) {
+        console.log(game.hostId);
         io.to(game.hostId).emit("win", user);
-      }
     });
     
     socket.on("startGame", async data => {
