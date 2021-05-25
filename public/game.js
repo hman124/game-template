@@ -29,7 +29,7 @@
     "The Fifteenth Amendment",
     "The Fourteenth Amendment",
     "The Thirteenth Amendment",
-    "The Civil Rights Act (1964)",
+    "The Civil Rights Act (1957)",
     "The Twenty-Fourth Amendment",
     "The Stamp Act",
     "The Homestead Act",
@@ -108,7 +108,7 @@
       answer: list[15]
     },
     {
-      question: "Find the act that was signed by Dwight D. Eisenhower in 1964",
+      question: "Find the act that was signed by Dwight D. Eisenhower in 1957",
       answer: list[18]
     },
     {

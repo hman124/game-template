@@ -33,8 +33,8 @@ app.get("/", (req, res) => {
   res.sendFile(`${__dirname}/views/index.html`);
 });
 
-app.get("/play", (req, res) => {
-  res.sendFile(`${__dirname}/views/join.html`);
+app.get("/new", (req, res) => {
+  res.sendFile(`${__dirname}/views/new.html`);
 });
 
 app.post("/game/new", (req, res) => {
