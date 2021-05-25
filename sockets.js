@@ -9,16 +9,12 @@ module.exports = function(http) {
       let {gamePin, userId} = data,
           isValid = users.isUserValid(userId, gamePin),
           user = await db.first("isHost", "Users", "userId=?", userId)
-      if(isValid && !user.isHost) {
-        Object.values(data).forEach(x => {
-          socket.join(x);
-        });
-        io.to(gamePin).emit("newUser");
+      if(isValid) {
+        Object.values(data).forEach(x => {socket.join(x);});
+        if(!user.isHost) {io.to(gamePin).emit("newUser");}
       } else {
         socket.emit("linkGameFailure", {"message":"user doesn't exist in game"})
       }
-      
-      
     });
 
     socket.on("win", async userId => {

@@ -2,7 +2,7 @@ function linkGame() {
   window["userId"] = "{{userId}}";
   window["gamePin"] = "{{gamePin}}";
   socket.on("connect", () => {
-    socket.emit("linkGame", ["{{gamePin}}", "{{userId}}"]);
+    socket.emit("linkGame", {"gamePin": {{gamePin}}", "userId": "{{userId}}"});
   });
 }
 linkGame();
