@@ -21,9 +21,13 @@ document.querySelector("#start").addEventListener("click", () => {
     data.forEach(x => {
       var listElem = document.createElement("li"),
           title = x.isHost ? " (host)" : "";
+      listElem.setAttribute("data-userId", x.userId);
       listElem.innerHTML = x.screenName + title;
-      listElem.addEventListener("click", () => { 
-        
+      listElem.addEventListener("click", async () => { 
+        var req = await fetch("/game/kick?userId=" + event.target.getAttribute("data-userId"), {method:"delete"}),
+            data = await req.json();
+            if(!req.ok) {alert("error, this person can't be kicked.")}
+            updatePlayers();
       });
       document.querySelector("#players").appendChild(listElem);
     });
@@ -34,3 +38,4 @@ document.querySelector("#start").addEventListener("click", () => {
     document.querySelector("#domain").innerHTML =
       window.location.protocol + "//" + window.location.host;
 });
+linkGa

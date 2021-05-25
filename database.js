@@ -12,7 +12,7 @@ db.serialize(() => {
     //console.log("Database ready");
   }
 });
-
+//db.run("Update Games Set isStarted=0 Where gamePin=?", "3ebc");
 //db.run("Delete From Games Where 1=0")
 //db.run("Delete From Users Where 1")
 
