@@ -109,6 +109,7 @@ app.delete("/game/kick", async (req, res) => {
       res.sendStatus(500);
     } else {
       await db.run("Delete From Users Where userId=?", req.query.userId);
+      io.to(req.query.userId).emit("gameStartSuccess");
       res.sendStatus(200);
     }
   } else {

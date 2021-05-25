@@ -24,12 +24,10 @@ document.querySelector("#start").addEventListener("click", () => {
       listElem.setAttribute("data-userId", x.userId);
       listElem.innerHTML = x.screenName + title;
       listElem.addEventListener("click", async () => { 
-      alert("clicked");
-fetch("/game/kick?userId=" + event.target.getAttribute("data-userId"), {"method":"DELETE", "credentials":"include"})
-.catch(err => {alert("This player can't be kicked");})
-.then(response => response.json())
-.then(data => updatePlayers);
-});
+      fetch("/game/kick?userId=" + event.target.getAttribute("data-userId"), {"method":"DELETE", "credentials":"include"})
+      .catch(err => {alert("This player can't be kicked");})
+      updatePlayers();
+    });
       document.querySelector("#players").appendChild(listElem);
     });
   }
