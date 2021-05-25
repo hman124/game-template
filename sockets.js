@@ -5,12 +5,20 @@ module.exports = function(http) {
   const db = require("./database.js");
 
   io.on("connect", socket => {
-    socket.on("linkGame", data => {
-      data.forEach(x => {
-        socket.join(x);
-      });
+    socket.on("linkGame", async data => {
+      let {gamePin, userId} = data,
+          isValid = users.isUserValid(userId, gamePin);
+      if(isValid) {
+        let user = await db.first("isHost", "Users", "userId=?", userId)
+        Object.values(data).forEach(x => {
+          socket.join(x);
+        });
+        io.to(gamePin).emit("newUser");
+      } else {
+        socket.emit("linkGameFailure", {"message":"user doesn't exist in game"})
+      }
       
-      io.to(data[0]).emit("newUser");
+      
     });
 
     socket.on("win", async userId => {
