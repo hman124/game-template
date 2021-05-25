@@ -46,10 +46,11 @@ app.post("/game/new", (req, res) => {
 });
 
 app.post("/game/join", async (req, res) => {
-  if (req.cookies.userId || req.cookies.gamePin) {
-    await db.run("Delete From Users Where userId=?", req.cookies.userId);
-   // res.cookie("gamePin", "", { maxAge: 0 });
-   //res.cookie("userId", "", { maxAge: 0 });
+  let {userId} = req.cookies;
+  if (!!userId || !!req.cookies.gamePin) {
+    await db.run("Delete From Users Where userId=?", userId);
+    res.cookie("gamePin", "", { maxAge: 0 });
+    res.cookie("userId", "", { maxAge: 0 });
   }
   let { gamePin, user } = req.body,
     game = await db.first("hostId", "Games", "gamePin=?", gamePin),
@@ -70,11 +71,17 @@ app.get("/join/quick", (req, res) => {
   res.render(__dirname + "/views/quick.hbs", req.query);
 });
 
-app.get("/join/host-quick/go", async (req, res) => {
-  let user = new users.User(req.query.user);
-  await db.run("Delete From Users Where currentGame=?", req.query.pin);
-  await db.run("Update Games Set hostId=?, isStarted=0 Where gamePin=?", user.userId, req.query.pin);
-  res.redirect(303"/game/wait");
+app.get("/join/host-quick", (req, res) => {
+  res.render(__dirname + "/views/host-quick.hbs", req.query);
+})
+
+app.post("/join/host-quick/go", async (req, res) => {
+  let user = new users.User(req.body.user);
+  await db.run("Delete From Users Where currentGame=?", req.body.gamePin);
+  await db.run("Update Games Set hostId=?, isStarted=0 Where gamePin=?", user.userId, req.body.gamePin);
+  res.cookie("userId", user.userId);
+  res.cookie("gamePin", req.body.gamePin);
+  res.redirect(303, "/game/wait");
 });
 
 app.use(async (req, res, next) => {

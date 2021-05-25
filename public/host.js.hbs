@@ -22,6 +22,9 @@ document.querySelector("#start").addEventListener("click", () => {
       var listElem = document.createElement("li"),
           title = x.isHost ? " (host)" : "";
       listElem.innerHTML = x.screenName + title;
+      listElem.addEventListener("click", () => { 
+        
+      });
       document.querySelector("#players").appendChild(listElem);
     });
   }

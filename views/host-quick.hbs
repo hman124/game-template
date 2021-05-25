@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A cool thing made with Glitch">
+    <title>Civilpaper - Join Game</title>
+    <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/style.css">
+ </head>
+  <body>
+    <h3>Join game: <i style="font-family:courier;">{{pin}}</i></h3>
+      <form action="/join/host-quick/go" method="post">
+        <input name="gamePin" type="hidden" value="{{pin}}">
+        <input name="user" type="text" maxlength="15" placeholder="Your Username" required>
+        <input type="submit" value="Join Game">
+      </form> 
+  </body>
+</html>

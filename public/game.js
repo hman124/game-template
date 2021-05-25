@@ -124,6 +124,7 @@
   var option = Math.floor(Math.random() * objectives.length);
 
   window.addEventListener("load", () => {
+alert(window.userId);
     if(!window.userId) {
       alert("An error has occurred!");
     } else {
