@@ -3,6 +3,12 @@
   <head>
     {{> head}}
     <title>Civilpaper - Playing game</title>
+    <style>
+      ol {
+        font-size:3rem;
+        margin-left:3rem !important;
+      }
+    </style>
   </head>
   <body>
     <h1>Complete the objective to win!</h1> <p>
@@ -12,12 +18,14 @@
     <hr>
     <h1>Leaderboard:</h1>
     <ol id="thing"></ol>
+    <p id="nothing">Nothing here yet</p>
     {{> body}}
     <script>
       window.onerror = alert;
       socket.on("win", win => {
+        document.querySelector("#nothing").style.display = "none";
         var li = document.createElement("li");
-        li.innerHTML = win.screenName;
+        li.innerHTML = "<b>" + win.screenName + "</b>";
         document.querySelector("#thing").appendChild(li);
       });
     </script>

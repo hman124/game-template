@@ -3,13 +3,13 @@
   font-family:rubik;
 }
 
+:root {
+  font-size: 18px;
+}
+
 *, *::before, *::after {
   margin:0;
   padding:0;
-  box-sizing:border-box;
-}
-
-*::after, *::before {
   box-sizing:border-box;
 }
 
