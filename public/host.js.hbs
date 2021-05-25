@@ -14,21 +14,18 @@ document.querySelector("#start").addEventListener("click", () => {
     alert("Game failed to start... try making a new game ( or not hacking into my code :) )");
   });
 
-  async function updatePlayers() {
-    document.querySelector("#players").innerHTML = "";
-    var req = await fetch("/game/members", {credentials:"include"}),
-        data = await req.json();
-    data.forEach(x => {
-      var listElem = document.createElement("li"),
-          title = x.isHost ? " (host)" : "";
+  async function updatePlayers(username, userId) {
+      var listElem = document.createElement("li")
       listElem.setAttribute("data-userId", x.userId);
-      listElem.innerHTML = x.screenName + title;
+      else {
+      listElem.innerHTML = x.screenName;
+      document.querySelector("#none").style.display="none";
       listElem.addEventListener("click", async () => { 
       fetch("/game/kick?userId=" + event.target.getAttribute("data-userId"), {"method":"DELETE", "credentials":"include"})
       .catch(err => {alert("This player can't be kicked");})
-      updatePlayers();
+      event.target.remove();
     });
-      document.querySelector("#players").appendChild(listElem);
+      document.querySelector("#players").appendChild(listElem);}
     });
   }
 
