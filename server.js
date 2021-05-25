@@ -124,11 +124,6 @@ app.get("/linkgame.js", (req, res) => {
   res.render(__dirname + "/public/linkgame.js.hbs", req.cookies);
 });
 
-app.get("/host.js", (req, res) => {
-  res.type("text/javascript");
-  res.render(__dirname + "/public/host.js.hbs", req.cookies);
-});
-
 app.get("/game/members", async (req, res) => {
   if (req.user.isHost) {
     res.send(await db.all("*", "Users", "currentGame=?", req.game.gamePin));

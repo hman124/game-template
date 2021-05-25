@@ -9,6 +9,7 @@ module.exports = function(http) {
       data.forEach(x => {
         socket.join(x);
       });
+      
       io.to(data[0]).emit("newUser");
     });
 
