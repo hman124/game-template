@@ -55,13 +55,15 @@ app.post("/game/join", async (req, res) => {
   let { gamePin, user } = req.body,
     game = await db.first("hostId", "Games", "gamePin=?", gamePin),
     usertaken = await db.first("userId", "Users", "screenName=? And currentGame=?",user,gamePin);
-  if (game.hostId && !usertaken.userId) {
+  if(/^\s+$/.test(user) || !user || !gamePin) {
+    res.redirect(303, "/?invalid=true");
+  } else if (game.hostId && !usertaken.userId) {
     let newuser = new users.User(user, gamePin);
     res.cookie("gamePin", newuser.currentGame);
     res.cookie("userId", newuser.userId);
     res.redirect(303, "/game/wait");
   } else if (usertaken.userId) {
-    res.redirect(307, "/play?taken=true");
+    res.redirect(303, "/?taken=true");
   } else {
     res.send("Game Doesn't Exist");
   }
