@@ -15,19 +15,24 @@ socket.on("gameStartFailure", () => {
   );
 });
 
-socket.on("newUser", async (username, userId) => {
+var num_users = 0;
+
+socket.on("newUser", async user => {
+  num_users++;
   var listElem = document.createElement("li");
-  listElem.setAttribute("data-userId", x.userId);
-  listElem.innerHTML = x.screenName;
+  listElem.setAttribute("data-userId", user.userId);
+  listElem.innerHTML = user.screenName;
 
   document.querySelector("#none").style.display = "none";
   listElem.addEventListener("click", async () => {
     fetch("/game/kick?userId=" + event.target.getAttribute("data-userId"), {
       method: "DELETE",
       credentials: "include"
-    }).catch(err => {
-      alert("This player can't be kicked");
     });
+    num_users--;
+    if(num_users == 0) {
+      document.querySelector("#none").style.display = "block";       
+    }
     event.target.remove();
   });
   document.querySelector("#players").appendChild(listElem);
