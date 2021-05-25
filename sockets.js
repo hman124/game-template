@@ -7,9 +7,9 @@ module.exports = function(http) {
   io.on("connect", socket => {
     socket.on("linkGame", async data => {
       let {gamePin, userId} = data,
-          isValid = users.isUserValid(userId, gamePin);
-      if(isValid) {
-        let user = await db.first("isHost", "Users", "userId=?", userId)
+          isValid = users.isUserValid(userId, gamePin),
+          user = await db.first("isHost", "Users", "userId=?", userId)
+      if(isValid && !user.isHost) {
         Object.values(data).forEach(x => {
           socket.join(x);
         });
