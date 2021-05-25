@@ -102,29 +102,29 @@
   }
   
 
-  var objectives = [
-    {
+   /*{
       question: "Find the amendment that gave freed slaves the right to vote",
       answer: list[15]
-    },
+    },*/
+  var objectives = [
     {
       question: "Find the act that was signed by Dwight D. Eisenhower in 1957",
       answer: list[18]
-    },
+    }
+  ];
+    /*,
     {
-      question: "Find the amendment that freed former slaves.",
+      question: "Find the amendment that freed slaves.",
       answer: list[17]
     },
     {
       question: "Find the amendment that granted citizenship to all slaves in the U.S.",
       answer: list[16]
-    }
-  ];
+    }*/
 
   var option = Math.floor(Math.random() * objectives.length);
 
   window.addEventListener("load", () => {
-alert(window.userId);
     if(!window.userId) {
       alert("An error has occurred!");
     } else {
