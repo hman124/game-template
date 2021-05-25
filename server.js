@@ -104,12 +104,15 @@ app.use(async (req, res, next) => {
 app.delete("/game/kick", async (req, res) => {
   if(req.user.isHost) {
     let user = await db.first("*", "Users", "userId=?", req.query.userId);
+    console.log(user);
     if(user.isHost) {
-      res.sendStatus(400);
+      res.sendStatus(500);
     } else {
       await db.run("Delete From Users Where userId=?", req.query.userId);
       res.sendStatus(200);
     }
+  } else {
+    res.sendStatus(500);
   }
 });
 
