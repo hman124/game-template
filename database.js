@@ -13,7 +13,7 @@ db.serialize(() => {
   }
 });
 
-//db.run("Delete From Games Where 1")
+//db.run("Delete From Games Where 1=0")
 //db.run("Delete From Users Where 1")
 
 function dbAll(selection, table, where, ...stmts) {

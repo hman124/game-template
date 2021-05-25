@@ -66,6 +66,17 @@ app.post("/game/join", async (req, res) => {
   }
 });
 
+app.get("/join/quick", (req, res) => {
+  res.render(__dirname + "/views/quick.hbs", req.query);
+});
+
+app.get("/join/host-quick/go", async (req, res) => {
+  let user = new users.User(req.query.user);
+  await db.run("Delete From Users Where currentGame=?", req.query.pin);
+  await db.run("Update Games Set hostId=?, isStarted=0 Where gamePin=?", user.userId, req.query.pin);
+  res.redirect(303"/game/wait");
+});
+
 app.use(async (req, res, next) => {
   //check to make sure that the user is valid. If so, save the details in the request
   if (!req.cookies.gamePin && !req.cookies.userId) {
