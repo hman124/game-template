@@ -17,31 +17,36 @@ socket.on("gameStartFailure", () => {
 
 var users = [];
 
-socket.on("newUser", async user => {
-  if (users.indexOf(user.userId) !== -1) {
+socket.on("newUser", async data => {
+  if (users.indexOf(data.user.userId) !== -1 && data.join) {
     return;
+  } else if (!data.join) {
+    removeUser(data.user.userId);
+    document.querySelector("li[data-userId=" + data.user.userId + "]").remove();
   } else {
-    users.push(user.userId);
+    users.push(data.user.userId);
     var listElem = document.createElement("li");
-    listElem.setAttribute("data-userId", user.userId);
-    listElem.innerHTML = user.screenName;
-
+    listElem.setAttribute("data-userId", data.user.userId);
+    listElem.innerHTML = data.user.screenName;
     document.querySelector("#none").style.display = "none";
     listElem.addEventListener("click", async () => {
-      let userId = event.target.getAttribute("data-userId");
-      fetch("/game/kick?userId=" + userId, {
-        method: "DELETE",
-        credentials: "include"
-      });
-      users.splice(users.indexOf(userId, 1));
+      removeUser(event.target.getAttribute("data-userId"));
       event.target.remove();
-      if (users.length == 0) {
-        document.querySelector("#none").style.display = "block";
-      }
     });
     document.querySelector("#players").appendChild(listElem);
   }
 });
+
+function removeUser(userId) {
+  fetch("/game/kick?userId=" + userId, {
+    method: "DELETE",
+    credentials: "include"
+  });
+  users.splice(users.indexOf(userId, 1));
+  if (users.length == 0) {
+    document.querySelector("#none").style.display = "block";
+  }
+}
 
 window.addEventListener("load", () => {
   document.querySelector("#domain").innerHTML =
