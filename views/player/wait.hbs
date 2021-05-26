@@ -2,14 +2,15 @@
 <html lang="en">
   <head>
     {{> head}}
-    <title>Civilpaper - Waiting</title>
+    <title>QuickPaper - Waiting</title>
  </head>
   <body>
     <h3>Waiting for the game to start...</h3>
     <hr>
     <h1>Success!</h1>
-    <h3>You are in the game. You should see your name on the host's screen.
-      Now all you have to do is wait for the host to start the game!</h3>
+    <h3>You are now in the game.</h3>
+    <hr>
+    <a href="/game/leave">Leave the game :(</a>
     {{> body}}
     <script>
     socket.on("gameStartSuccess", () => {

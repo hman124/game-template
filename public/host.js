@@ -15,27 +15,32 @@ socket.on("gameStartFailure", () => {
   );
 });
 
-var num_users = 0;
+var users = [];
 
 socket.on("newUser", async user => {
-  num_users++;
-  var listElem = document.createElement("li");
-  listElem.setAttribute("data-userId", user.userId);
-  listElem.innerHTML = user.screenName;
+  if (users.indexOf(user.userId) !== -1) {
+    return;
+  } else {
+    users.push(user.userId);
+    var listElem = document.createElement("li");
+    listElem.setAttribute("data-userId", user.userId);
+    listElem.innerHTML = user.screenName;
 
-  document.querySelector("#none").style.display = "none";
-  listElem.addEventListener("click", async () => {
-    fetch("/game/kick?userId=" + event.target.getAttribute("data-userId"), {
-      method: "DELETE",
-      credentials: "include"
+    document.querySelector("#none").style.display = "none";
+    listElem.addEventListener("click", async () => {
+      let userId = event.target.getAttribute("data-userId");
+      fetch("/game/kick?userId=" + userId, {
+        method: "DELETE",
+        credentials: "include"
+      });
+      users.splice(users.indexOf(userId, 1));
+      event.target.remove();
+      if (users.length == 0) {
+        document.querySelector("#none").style.display = "block";
+      }
     });
-    num_users--;
-    if(num_users == 0) {
-      document.querySelector("#none").style.display = "block";       
-    }
-    event.target.remove();
-  });
-  document.querySelector("#players").appendChild(listElem);
+    document.querySelector("#players").appendChild(listElem);
+  }
 });
 
 window.addEventListener("load", () => {

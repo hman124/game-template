@@ -132,6 +132,11 @@ app.get("/game/members", async (req, res) => {
   }
 });
 
+app.get("/game/leave", async (req,res)=>{
+  await db.run("Delete From Users Where userId=?", req.user.userId);
+  res.redirect(303, "/?error=true");
+});
+
 app.get("/api/listdb", async (req, res) => {
   let data = await db.list();
   res.send(data);
