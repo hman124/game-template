@@ -38,8 +38,9 @@ socket.on("userLeave", user => {
   document.querySelector("li[data-userId='" + user.userId + "']").remove();
   removeUser(user.userId);
   new Noty({
-    timeout:1500,
-    text: "\"" + user.screenName + "\" left"
+    timeout:1000,
+    text: "A user left",
+    theme: "sunset"
   }).show();
 });
 
