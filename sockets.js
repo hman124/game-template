@@ -11,7 +11,7 @@ module.exports = function(http) {
           user = await db.first("*", "Users", "userId=?", userId)
       if(isValid) {
         Object.values(data).forEach(x => {socket.join(x);});
-        if(!user.isHost) {io.to(gamePin).emit("newUser", {join: true, user: user});}
+        if(!user.isHost) {io.to(gamePin).emit("newUser", user);}
       } else {
         socket.emit("linkGameFailure", {"message":"user doesn't exist in game"})
       }

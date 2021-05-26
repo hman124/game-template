@@ -132,9 +132,9 @@ app.get("/game/members", async (req, res) => {
   }
 });
 
-app.get("/game/leave", async (req,res)=>{
+app.get("/game/leave", async (req, res)=>{
   await db.run("Delete From Users Where userId=?", req.user.userId);
-  io.to(req.game.gamePin).emit("updateUsers", {join:false, user: req.user});
+  io.to(req.game.gamePin).emit("userLeave", req.user);
   res.redirect(303, "/?error=true");
 });
 

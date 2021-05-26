@@ -17,17 +17,14 @@ socket.on("gameStartFailure", () => {
 
 var users = [];
 
-socket.on("newUser", async data => {
-  if (users.indexOf(data.user.userId) !== -1 && data.join) {
+socket.on("newUser", async user => {
+  if (users.indexOf(user.userId) !== -1) {
     return;
-  } else if (!data.join) {
-    removeUser(data.user.userId);
-    document.querySelector("li[data-userId=" + data.user.userId + "]").remove();
   } else {
-    users.push(data.user.userId);
+    users.push(user.userId);
     var listElem = document.createElement("li");
-    listElem.setAttribute("data-userId", data.user.userId);
-    listElem.innerHTML = data.user.screenName;
+    listElem.setAttribute("data-userId", user.userId);
+    listElem.innerHTML = user.screenName;
     document.querySelector("#none").style.display = "none";
     listElem.addEventListener("click", async () => {
       removeUser(event.target.getAttribute("data-userId"));
@@ -35,6 +32,15 @@ socket.on("newUser", async data => {
     });
     document.querySelector("#players").appendChild(listElem);
   }
+});
+
+socket.on("userLeave", user => {
+  document.querySelector("li[data-userId='" + user.userId + "']").remove();
+  removeUser(user.userId);
+  new Noty({
+    timeout:1500,
+    text: "\"" + user.screenName + "\" left"
+  }).show();
 });
 
 function removeUser(userId) {
